@@ -28,6 +28,7 @@ urlpatterns = [
     
 
     path('api/auth/', include('djoser.urls.jwt')),
+    path('api/social/auth/', include('djoser.social.urls')),
     
     # Your application endpoints
     path('api/organizers/', include('organizers.urls')),
