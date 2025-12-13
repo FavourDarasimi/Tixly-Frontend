@@ -12,16 +12,16 @@ const Navbar = () => {
         <h1 className="text-3xl font-semibold ">Tixly</h1>
       </div>
       <ul className="flex gap-10 text-[#3a3a3a] text-lg">
-        <li className="hover:font-semibold cursor-pointer transition duration-300">
+        <li className="hover:text-black cursor-pointer transition duration-300">
           About
         </li>
-        <li className="hover:font-semibold cursor-pointer transition duration-300">
+        <li className="hover:text-black cursor-pointer transition duration-300">
           Trending
         </li>
-        <li className="hover:font-semibold cursor-pointer transition duration-300">
+        <li className="hover:text-black cursor-pointer transition duration-300">
           How it Works
         </li>
-        <li className="hover:font-semibold cursor-pointer transition duration-300">
+        <li className="hover:text-black cursor-pointer transition duration-300">
           Features
         </li>
       </ul>
