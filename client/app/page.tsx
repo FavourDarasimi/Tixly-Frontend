@@ -1,31 +1,11 @@
-import Image from "next/image";
-import hero_section from "@/public/images/hero-section.png";
-import Button from "@/components/Button";
+import HeroSection from "@/components/landing_page/HeroSection";
+import TrendingEvents from "@/components/landing_page/TrendingEvents";
 
 export default function Home() {
   return (
-    <section className="flex items-center mx-20 flex-1">
-      <div className="flex items-center">
-        <div className="w-[50%] space-y-7">
-          <div className="flex gap-1 text-[13px] items-center border rounded-full py-1 px-3 w-fit border-gray-400">
-            <span className="bg-[#FF5722] w-2 h-2 rounded-full animate-pulse"></span>
-            <p className="tracking-widest">
-              Introducing QR Code Scanning Support
-            </p>
-          </div>
-          <h1 className="text-7xl max-w-2xl ">
-            The Easiest Way to Host and Attend Live{" "}
-            <span className="text-[#FF5722]">Events</span>
-          </h1>
-          <h2 className="text-xl max-w-2xl">
-            Book Tickets in seconds or manage your own event with real-time
-            analytics and QR check-ins
-          </h2>
-          <Button>Get Started</Button>
-        </div>
-
-        <Image src={hero_section} alt="" className="w-[50%]" />
-      </div>
+    <section className="">
+      <HeroSection />
+      <TrendingEvents />
     </section>
   );
 }

@@ -6,7 +6,7 @@ import icon from "@/public/images/tixly-icon.png";
 
 const Navbar = () => {
   return (
-    <nav className="p-5 flex justify-between items-center sticky top-0">
+    <nav className="p-5 flex justify-between items-center fixed w-full top-0 bg-white z-50 shadow-md">
       <div className="flex gap-1 items-center">
         <Image src={icon} alt="" width={40} height={40} className="" />
         <h1 className="text-3xl font-semibold ">Tixly</h1>
@@ -25,7 +25,9 @@ const Navbar = () => {
           Features
         </li>
       </ul>
-      <Button>Log in</Button>
+      <Button type="primary" size="medium">
+        Log in
+      </Button>
     </nav>
   );
 };
