@@ -88,7 +88,7 @@ export default function FeaturesSection() {
   const [userType, setUserType] = useState<UserType>("attendee");
 
   return (
-    <section className="py-24 ">
+    <section id="features" className="py-24 ">
       <div className="max-w-7xl xl:max-w-[1500px] mx-auto px-6">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">

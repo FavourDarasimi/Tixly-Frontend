@@ -109,7 +109,7 @@ const HowItWorks: React.FC = () => {
   };
 
   return (
-    <section className="py-24 bg-white overflow-hidden">
+    <section id="how-it-works" className="py-24 bg-white overflow-hidden">
       <div className="max-w-7xl xl:max-w-[1500px] mx-auto px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-16">

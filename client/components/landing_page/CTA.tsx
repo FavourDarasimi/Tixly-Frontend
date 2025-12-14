@@ -32,11 +32,6 @@ const CTA = () => {
             Create an Event
           </a>
         </div>
-
-        {/* Trust Line */}
-        <p className="mt-8 text-sm text-white/80">
-          Free to use · Secure payments · QR code check-ins
-        </p>
       </div>
     </section>
   );

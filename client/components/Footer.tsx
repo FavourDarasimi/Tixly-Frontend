@@ -1,9 +1,22 @@
+"use client";
 import Link from "next/link";
 import { Twitter, Instagram, Linkedin, Facebook } from "lucide-react";
 
 export default function Footer() {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
   return (
-    <footer className="bg-slate-900 text-slate-300">
+    <footer className="bg-[#020617] text-slate-300">
       <div className="max-w-7xl xl:max-w-[1500px] mx-auto px-6 py-16">
         {/* Top Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
@@ -22,28 +35,28 @@ export default function Footer() {
             <div className="flex items-center gap-4 mt-6">
               <a
                 href="#"
-                className="hover:text-white transition"
+                className="hover:text-white transition cursor-pointer"
                 aria-label="Twitter"
               >
                 <Twitter size={20} />
               </a>
               <a
                 href="#"
-                className="hover:text-white transition"
+                className="hover:text-white transition cursor-pointer"
                 aria-label="Instagram"
               >
                 <Instagram size={20} />
               </a>
               <a
                 href="#"
-                className="hover:text-white transition"
+                className="hover:text-white transition cursor-pointer"
                 aria-label="LinkedIn"
               >
                 <Linkedin size={20} />
               </a>
               <a
                 href="#"
-                className="hover:text-white transition"
+                className="hover:text-white transition cursor-pointer"
                 aria-label="Facebook"
               >
                 <Facebook size={20} />
@@ -57,31 +70,26 @@ export default function Footer() {
               Explore
             </h4>
             <ul className="space-y-3 text-sm">
-              <li>
-                <Link href="/events" className="hover:text-white transition">
-                  Browse Events
-                </Link>
+              <li className="hover:text-white transition cursor-pointer">
+                Browse Events
               </li>
-              <li>
-                <Link
-                  href="/events/trending"
-                  className="hover:text-white transition"
-                >
-                  Trending Events
-                </Link>
+              <li
+                onClick={() => scrollToSection("how-it-works")}
+                className="hover:text-white transition cursor-pointer"
+              >
+                How It Works
               </li>
-              <li>
-                <Link
-                  href="/categories"
-                  className="hover:text-white transition"
-                >
-                  Categories
-                </Link>
+              <li
+                onClick={() => scrollToSection("features")}
+                className="hover:text-white transition cursor-pointer"
+              >
+                Features
               </li>
-              <li>
-                <Link href="/locations" className="hover:text-white transition">
-                  Locations
-                </Link>
+              <li
+                onClick={() => scrollToSection("faqs")}
+                className="hover:text-white transition cursor-pointer"
+              >
+                FAQs
               </li>
             </ul>
           </div>
@@ -95,23 +103,32 @@ export default function Footer() {
               <li>
                 <Link
                   href="/create-event"
-                  className="hover:text-white transition"
+                  className="hover:text-white transition cursor-pointer"
                 >
                   Create an Event
                 </Link>
               </li>
               <li>
-                <Link href="/pricing" className="hover:text-white transition">
+                <Link
+                  href="/pricing"
+                  className="hover:text-white transition cursor-pointer"
+                >
                   Pricing
                 </Link>
               </li>
               <li>
-                <Link href="/dashboard" className="hover:text-white transition">
+                <Link
+                  href="/dashboard"
+                  className="hover:text-white transition cursor-pointer"
+                >
                   Organizer Dashboard
                 </Link>
               </li>
               <li>
-                <Link href="/scan" className="hover:text-white transition">
+                <Link
+                  href="/scan"
+                  className="hover:text-white transition cursor-pointer"
+                >
                   Ticket Scanner
                 </Link>
               </li>
@@ -125,22 +142,27 @@ export default function Footer() {
             </h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/about" className="hover:text-white transition">
+                <Link
+                  href="/about"
+                  className="hover:text-white transition cursor-pointer"
+                >
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-white transition">
+                <Link
+                  href="/contact"
+                  className="hover:text-white transition cursor-pointer"
+                >
                   Contact
                 </Link>
               </li>
+
               <li>
-                <Link href="/faq" className="hover:text-white transition">
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="hover:text-white transition">
+                <Link
+                  href="/terms"
+                  className="hover:text-white transition cursor-pointer"
+                >
                   Terms & Privacy
                 </Link>
               </li>
