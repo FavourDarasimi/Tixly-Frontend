@@ -59,7 +59,7 @@ const Navbar = () => {
           FAQs
         </li>
       </ul>
-      <Button type="primary" size="medium">
+      <Button type="primary" size="medium" className="rounded-lg">
         Log in
       </Button>
     </nav>

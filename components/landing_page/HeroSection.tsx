@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import hero_section from "@/public/images/hero-section.png";
 import Button from "@/components/Button";
+import { FaArrowRight } from "react-icons/fa";
+
 const HeroSection = () => {
   return (
     <div className="flex items-center h-screen mx-20">
@@ -24,11 +26,20 @@ const HeroSection = () => {
         </h2>
         <div className="flex gap-3">
           <Link href="/join">
-            <Button size="large" type="primary">
+            <Button
+              size="large"
+              type="primary"
+              className="rounded-lg  group inline-flex gap-2 items-center"
+            >
               Get Started
+              <FaArrowRight
+                size={12}
+                className="sm:w-4 sm:h-4 group-hover:ml-2 group-hover:mr-0 mr-2 transition-all duration-300 "
+                color="white"
+              />
             </Button>
           </Link>
-          <Button size="large" type="secondary">
+          <Button size="large" type="secondary" className="rounded-lg">
             Browse Events
           </Button>
         </div>

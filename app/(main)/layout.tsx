@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import Footer from "@/components/Footer";
 import Navbar from "@/components/landing_page/Navbar";
 
 export const metadata: Metadata = {
@@ -16,6 +16,7 @@ export default function Main({
     <section>
       <Navbar />
       {children}
+      <Footer />
     </section>
   );
 }

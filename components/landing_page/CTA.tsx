@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { FaArrowRight } from "react-icons/fa";
+import Button from "../Button";
 
 const CTA = () => {
   return (
@@ -20,9 +22,18 @@ const CTA = () => {
 
         {/* Actions */}
         <Link href="/join">
-          <p className="inline-flex items-center justify-center rounded-full bg-white px-8 py-4 text-base font-semibold text-[#FF5722] shadow-lg hover:bg-slate-100 transition">
-            Get Started
-          </p>
+          <Button
+            type="white"
+            size="large"
+            className=" rounded-full group inline-flex gap-2 items-center font-semibold text-[#FF5722]"
+          >
+            Get Started for free
+            <FaArrowRight
+              size={12}
+              className="sm:w-4 sm:h-4 group-hover:ml-2 group-hover:mr-0 mr-2 transition-all duration-300 "
+              color="#FF5722"
+            />
+          </Button>
         </Link>
       </div>
     </section>

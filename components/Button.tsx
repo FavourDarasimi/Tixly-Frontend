@@ -5,20 +5,20 @@ type ButtonProps = {
   onClick?: () => void;
   className?: string;
   size: keyof typeof sizeClasses;
-  type: "primary" | "secondary";
+  type: "primary" | "secondary" | "white";
 };
 
 const sizeClasses = {
   small: "py-1 px-3 text-sm",
   medium: "py-2 px-5 text-md",
-  large: "py-2 px-7 text-lg",
+  large: "py-4 px-7 text-lg",
 };
 
 const Button = ({ children, onClick, className, size, type }: ButtonProps) => {
   if (type === "primary") {
     return (
       <button
-        className={`bg-[#FF5722]  text-white  ${sizeClasses[size]} rounded-lg hover:bg-[#E64A19] hover:scale-105 transition duration-300 cursor-pointer ${className}`}
+        className={`bg-[#FF5722]  text-white  ${sizeClasses[size]}  hover:bg-[#E64A19] hover:scale-105 transition duration-300 cursor-pointer ${className}`}
         onClick={onClick}
       >
         {children}
@@ -27,7 +27,16 @@ const Button = ({ children, onClick, className, size, type }: ButtonProps) => {
   } else if (type === "secondary") {
     return (
       <button
-        className={`border-gray-400 border  ${sizeClasses[size]} rounded-lg   hover:scale-105 transition duration-300 cursor-pointer ${className}`}
+        className={`border-gray-400 border  ${sizeClasses[size]}    hover:scale-105 transition duration-300 cursor-pointer ${className}`}
+        onClick={onClick}
+      >
+        {children}
+      </button>
+    );
+  } else if (type === "white") {
+    return (
+      <button
+        className={`bg-white  ${sizeClasses[size]}    hover:scale-105 transition duration-300 cursor-pointer ${className}`}
         onClick={onClick}
       >
         {children}
