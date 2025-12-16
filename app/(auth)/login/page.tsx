@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Eye, EyeOff, LogIn } from "lucide-react";
 import Link from "next/link";
 import Button from "@/components/Button";
+import { login } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -13,7 +15,9 @@ const Login = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [rememberMe, setRememberMe] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
+  const [formErrors, setFormErrors] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -44,12 +48,27 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
     if (validateForm()) {
-      // Handle login logic here
-      console.log("Form submitted:", { ...formData, rememberMe });
+      try {
+        const data = await login(formData);
+        console.log("Success:", data);
+        setTimeout(() => {
+          setIsSubmitting(false);
+          router.push("/login");
+        }, 3000);
+      } catch (err: any) {
+        console.log(err);
+        const message = "Invalid credentials or account not verified.";
+        setFormErrors(message);
+
+        setIsSubmitting(false);
+      }
     }
+    setIsSubmitting(false);
   };
 
   return (
@@ -64,6 +83,18 @@ const Login = () => {
             Log in to access your account and continue your journey
           </p>
         </div>
+
+        {formErrors.length > 0 && (
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+            <div className="flex">
+              <div className="ml-3">
+                <div className="mt-2 text-[15px] text-red-700">
+                  <ul className="list-disc pl-5 space-y-1">{formErrors}</ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -142,8 +173,13 @@ const Login = () => {
             </a>
           </div>
 
-          <Button type="primary" size="large" className="w-full rounded-full">
-            Log In
+          <Button
+            disabled={isSubmitting}
+            type="primary"
+            size="large"
+            className="w-full rounded-full"
+          >
+            {isSubmitting ? "Logging In..." : "Log In"}
           </Button>
 
           {/* Divider */}
@@ -152,10 +188,10 @@ const Login = () => {
           <p className="text-center text-sm text-gray-600">
             New to Tixly?
             <Link
-              href="/login"
+              href="/signup"
               className="text-[#FF5722] font-semibold hover:underline"
             >
-              Log in
+              Create an account
             </Link>
           </p>
         </form>

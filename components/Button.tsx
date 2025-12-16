@@ -6,6 +6,7 @@ type ButtonProps = {
   className?: string;
   size: keyof typeof sizeClasses;
   type: "primary" | "secondary" | "white";
+  disabled?: boolean;
 };
 
 const sizeClasses = {
@@ -14,25 +15,33 @@ const sizeClasses = {
   large: "py-4 px-7 text-lg",
 };
 
-const Button = ({ children, onClick, className, size, type }: ButtonProps) => {
+const Button = ({
+  children,
+  onClick,
+  className,
+  size,
+  type,
+  disabled,
+}: ButtonProps) => {
   if (type === "primary") {
     return (
       <button
-        className={`bg-[#FF5722]  text-white  ${sizeClasses[size]}  hover:bg-[#E64A19] hover:scale-105 transition duration-300 cursor-pointer ${className}`}
+        disabled={disabled}
+        className={`bg-[#FF5722] disabled:bg-[#FF5722]/50  text-white  ${sizeClasses[size]}  hover:bg-[#E64A19] hover:scale-105 transition duration-300 cursor-pointer ${className}`}
         onClick={onClick}
       >
         {children}
       </button>
     );
   } else if (type === "secondary") {
-    return (
-      <button
-        className={`border-gray-400 border  ${sizeClasses[size]}    hover:scale-105 transition duration-300 cursor-pointer ${className}`}
-        onClick={onClick}
-      >
-        {children}
-      </button>
-    );
+    // return
+    <button
+      disabled
+      className={`border-gray-400 border  ${sizeClasses[size]}    hover:scale-105 transition duration-300 cursor-pointer ${className}`}
+      onClick={onClick}
+    >
+      {children}
+    </button>;
   } else if (type === "white") {
     return (
       <button

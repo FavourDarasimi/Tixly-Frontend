@@ -4,20 +4,25 @@ import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { User, CalendarDays, Eye, EyeOff } from "lucide-react";
+import { signup } from "@/lib/api";
+import Button from "@/components/Button";
 
 const Signup = () => {
   const searchParams = useSearchParams();
   const role = searchParams.get("role");
   const router = useRouter();
 
+  const [formErrors, setFormErrors] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     email: "",
     username: "",
     first_name: "",
     last_name: "",
+    role: role || "",
     password: "",
     re_password: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setShowRePassword] = useState(false);
@@ -35,7 +40,6 @@ const Signup = () => {
       ...prev,
       [name]: value,
     }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
@@ -80,12 +84,35 @@ const Signup = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
     if (validateForm()) {
-      // Handle signup logic here
-      console.log("Form submitted:", { ...formData, role });
+      try {
+        // We pass the raw object (formData), NOT a string
+        const data = await signup(formData);
+
+        // If we get here, it worked!
+        console.log("Success:", data);
+        setTimeout(() => {
+          setIsSubmitting(false);
+          router.push("/login");
+        }, 3000);
+      } catch (err: any) {
+        // If the function threw an error, we catch it here and show the user
+        console.log(err);
+        if (typeof err === "object" && err !== null) {
+          const messages = Object.values(err).flat() as string[];
+          setFormErrors(messages);
+        } else {
+          // Fallback for network errors
+          setFormErrors(["Something went wrong. Please try again."]);
+        }
+        setIsSubmitting(false);
+      }
     }
+    setIsSubmitting(false);
   };
 
   if (!role) {
@@ -121,6 +148,22 @@ const Signup = () => {
         </div>
 
         {/* Form */}
+        {formErrors.length > 0 && (
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+            <div className="flex">
+              <div className="ml-3">
+                <div className="mt-2 text-[15px] text-red-700">
+                  <ul className="list-disc pl-5 space-y-1">
+                    {/* 3. Map through the clean strings */}
+                    {formErrors.map((error, index) => (
+                      <li key={index}>{error}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Email */}
           <div>
@@ -306,12 +349,19 @@ const Signup = () => {
           </div>
 
           {/* Submit Button */}
-          <button
+          {/* <button
+            disabled={isSubmitting}
             type="submit"
-            className="w-full py-4 rounded-full font-semibold bg-[#FF5722] hover:bg-[#E64A19] hover:shadow-lg hover:scale-105 transition-all duration-300 text-white"
+            className="w-full py-4 rounded-full font-semibold bg-[#FF5722] disabled:bg-[#FF5722]/50 hover:bg-[#E64A19] hover:shadow-lg hover:scale-105 transition-all duration-300 text-white"
+          ></button> */}
+          <Button
+            disabled={isSubmitting}
+            type="primary"
+            size="large"
+            className="w-full rounded-full"
           >
-            Create Account
-          </button>
+            {isSubmitting ? "Creating Account..." : "Create Account"}
+          </Button>
 
           {/* Login Link */}
           <p className="text-center text-sm text-gray-600">

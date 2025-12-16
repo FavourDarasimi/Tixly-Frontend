@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { CheckCircle, XCircle, Loader2, Mail } from "lucide-react";
 import Link from "next/link";
+import { activateAccount, resendActivation } from "@/lib/api";
+import Button from "@/components/Button";
 
 type ActivationStatus = "loading" | "success" | "error" | "expired";
 
@@ -12,9 +14,8 @@ const ActivateAccount = () => {
   const router = useRouter();
   const [status, setStatus] = useState<ActivationStatus>("loading");
   const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Get uid and token from URL path parameters
-  // URL structure: /activate/MTI/d0uz16-c409dbd4e6d0baf8d49c63c786be06f1
   const uid = params.uid as string;
   const token = params.token as string;
 
@@ -25,69 +26,35 @@ const ActivateAccount = () => {
     }
 
     // Activate account when component mounts
-    activateAccount(uid, token);
+    activate(uid, token);
   }, [token, uid]);
 
-  const activateAccount = async (uid: string, token: string) => {
+  const activate = async (uid: string, token: string) => {
     try {
-      // TODO: Replace with actual API call
-      // const response = await fetch('/api/auth/activate', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ uid, token })
-      // });
-      //
-      // const data = await response.json();
-      //
-      // if (response.ok) {
-      //   setStatus("success");
-      //   setTimeout(() => {
-      //     router.push("/login");
-      //   }, 3000);
-      // } else if (data.error === 'expired') {
-      //   setStatus("expired");
-      // } else {
-      //   setStatus("error");
-      // }
+      const response = await activateAccount(uid, token); // This line is calling itself recursively
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Simulate success response (change to test different scenarios)
-      const mockSuccess = true;
-
-      if (mockSuccess) {
-        setStatus("success");
-        // Redirect to login after 3 seconds
-        setTimeout(() => {
-          router.push("/login");
-        }, 3000);
-      } else {
-        setStatus("error");
-      }
+      // This condition will always be true if the recursive call doesn't throw an error
+      setStatus("success");
+      // Redirect to login after 3 seconds
+      setTimeout(() => {
+        router.push("/login");
+      }, 3000);
     } catch (error) {
-      console.error("Activation error:", error);
+      console.log("Activation error:", error);
       setStatus("error");
     }
   };
 
   const resendActivationEmail = async () => {
-    if (!email) {
-      alert("Please enter your email address");
-      return;
-    }
-
+    setIsSubmitting(true);
     try {
-      // TODO: Replace with actual API call
-      // await fetch('/api/auth/resend-activation', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email })
-      // });
-
-      alert("Activation email sent! Please check your inbox.");
+      const response = await resendActivation(email);
+      setTimeout(() => {
+        setIsSubmitting(false);
+        router.push("/login");
+      }, 3000);
     } catch (error) {
-      alert("Failed to resend email. Please try again.");
+      console.log("Failed to resend email. Please try again.");
     }
   };
 
@@ -176,6 +143,7 @@ const ActivateAccount = () => {
 
               <div className="space-y-4">
                 <input
+                  required
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -183,12 +151,15 @@ const ActivateAccount = () => {
                   className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#FF5722] focus:outline-none transition-colors"
                 />
 
-                <button
+                <Button
+                  disabled={isSubmitting}
                   onClick={resendActivationEmail}
-                  className="w-full py-3 rounded-full font-semibold bg-[#FF5722] hover:bg-[#E64A19] hover:shadow-lg hover:scale-105 transition-all duration-300 text-white"
+                  type="primary"
+                  size="medium"
+                  className="w-full rounded-full py-3 font-semibold"
                 >
-                  Resend Email
-                </button>
+                  {isSubmitting ? "Resending..." : "Resend Email"}
+                </Button>
               </div>
             </div>
 

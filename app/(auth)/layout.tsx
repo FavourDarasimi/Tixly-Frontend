@@ -12,9 +12,9 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <section>
+    <section className="flex flex-col">
       <AuthNavbar />
-      {children}
+      <div className="flex-1">{children}</div>
     </section>
   );
 }
