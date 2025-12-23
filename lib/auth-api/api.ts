@@ -16,7 +16,6 @@ export async function signup(formData: any) {
     }
     return await response.json();
   } catch (error) {
-    console.error("Signup Error:", error);
     throw error;
   }
 }

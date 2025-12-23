@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Eye, EyeOff, LogIn } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import Button from "@/components/Button";
-import { login } from "@/lib/auth-api/api";
-import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -16,7 +16,6 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
   const [formErrors, setFormErrors] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,6 +27,10 @@ const Login = () => {
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+    // Clear form errors
+    if (formErrors) {
+      setFormErrors("");
     }
   };
 
@@ -50,25 +53,25 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
-    if (validateForm()) {
-      try {
-        const data = await login(formData);
-        console.log("Success:", data);
-        setTimeout(() => {
-          setIsSubmitting(false);
-          router.push("/login");
-        }, 3000);
-      } catch (err: any) {
-        console.log(err);
-        const message = "Invalid credentials or account not verified.";
-        setFormErrors(message);
-
-        setIsSubmitting(false);
-      }
+    if (!validateForm()) {
+      return;
     }
-    setIsSubmitting(false);
+
+    setIsSubmitting(true);
+    setFormErrors("");
+
+    try {
+      await login(formData.email, formData.password);
+      // Redirect is handled in the AuthContext based on user role
+    } catch (err: any) {
+      console.error("Login error:", err);
+      const message =
+        err.message || "Invalid credentials or account not verified.";
+      setFormErrors(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -89,7 +92,7 @@ const Login = () => {
             <div className="flex">
               <div className="ml-3">
                 <div className="mt-2 text-[15px] text-red-700">
-                  <ul className="list-disc pl-5 space-y-1">{formErrors}</ul>
+                  <p>{formErrors}</p>
                 </div>
               </div>
             </div>
@@ -182,11 +185,9 @@ const Login = () => {
             {isSubmitting ? "Logging In..." : "Log In"}
           </Button>
 
-          {/* Divider */}
-
           {/* Sign Up Link */}
           <p className="text-center text-sm text-gray-600">
-            New to Tixly?
+            New to Tixly?{" "}
             <Link
               href="/signup"
               className="text-[#FF5722] font-semibold hover:underline"

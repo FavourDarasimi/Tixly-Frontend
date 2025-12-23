@@ -45,7 +45,7 @@ const MOCK_EVENTS = [
       "Learn how to pitch your idea to investors and secure your first round of funding.",
     date: "2025-04-10T10:00:00",
     location: "Online (Zoom)",
-    price: 0, // Free event test case
+    price: 0,
     currency: "NGN",
     image: eventimg,
     category: "Business",
@@ -75,8 +75,35 @@ const MOCK_EVENTS = [
 ];
 
 const TrendingEvents = async () => {
-  const data = await getEvents();
-  console.log(data);
+  let events = MOCK_EVENTS;
+
+  try {
+    const data = await getEvents();
+    console.log("API Response:", data);
+
+    // Check if data is an array
+    if (Array.isArray(data)) {
+      events = data;
+    }
+    // Check if data has a 'results' property (common pagination pattern)
+    else if (data && Array.isArray(data.results)) {
+      events = data.results;
+    }
+    // Check if data has an 'events' property
+    else if (data && Array.isArray(data.events)) {
+      events = data.events;
+    }
+    // If data is not in expected format, use mock data
+    else {
+      console.warn("API returned unexpected format, using mock data");
+      events = MOCK_EVENTS;
+    }
+  } catch (error) {
+    console.error("Failed to fetch events:", error);
+    // Fallback to mock data on error
+    events = MOCK_EVENTS;
+  }
+
   return (
     <section className="max-w-7xl xl:max-w-[1500px] mx-auto px-4 py-14">
       {/* Section Header */}
@@ -84,7 +111,7 @@ const TrendingEvents = async () => {
         <div>
           <h2 className="text-4xl font-bold text-gray-900">Upcoming Events</h2>
           <p className="text-gray-600 mt-1 text-lg">
-            Discover what’s happening near you and plan ahead.
+            Discover what's happening near you and plan ahead.
           </p>
         </div>
 
@@ -99,7 +126,7 @@ const TrendingEvents = async () => {
 
       {/* Events Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {MOCK_EVENTS.slice(0, 8).map((event) => (
+        {events.slice(0, 4).map((event) => (
           <EventCard
             key={event.id}
             id={event.id}
@@ -117,7 +144,7 @@ const TrendingEvents = async () => {
       </div>
 
       {/* Empty State */}
-      {MOCK_EVENTS.length === 0 && (
+      {events.length === 0 && (
         <div className="text-center py-16 text-gray-500">
           No upcoming events yet. Check back soon!
         </div>

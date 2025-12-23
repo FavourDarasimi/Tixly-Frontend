@@ -1,5 +1,5 @@
-import AuthNavbar from "@/components/Auth/AuthNavbar";
 import type { Metadata } from "next";
+import AuthNavbar from "@/components/auth/AuthNavbar";
 
 export const metadata: Metadata = {
   title: "Tixly",

@@ -75,7 +75,7 @@ const EventCard = ({
 
         {/* Category / Value Badge */}
         <div className="absolute top-4 left-4 bg-[#FF5722]/90 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
-          Conference
+          {category}
           {/* Example alternatives:
         Free Event
         From ₦5,000
