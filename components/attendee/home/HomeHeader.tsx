@@ -2,79 +2,55 @@
 
 import { Bell, MapPin, Search } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
-interface DashboardHeaderProps {
-  userName: string;
-  location: string;
-  onLocationChange?: (location: string) => void;
-  onSearch?: (query: string) => void;
-}
-
-const HomeHeader = ({
-  userName,
-  location,
-  onLocationChange,
-  onSearch,
-}: DashboardHeaderProps) => {
-  const [search, setSearch] = useState("");
+const HomeHeader = () => {
+  const { user } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <section className="rounded-xl bg-white p-6 shadow-sm">
-      {/* Top Row */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        {/* Greeting */}
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900">
-            Welcome back, {userName} 👋
-          </h1>
-          <p className="text-sm text-gray-500">
-            Discover events happening around you
-          </p>
+    <div className="max-w-7xl mx-auto px-6 py-20">
+      {/* Welcome Badge */}
+      {user && (
+        <div className="flex justify-center mb-6">
+          <div className="inline-flex items-center gap-2 border border-orange-200 rounded-full px-5 py-2">
+            <span className=" text-sm font-medium">
+              👋 Welcome back, {user.first_name}!
+            </span>
+          </div>
         </div>
+      )}
 
-        {/* Notification Bell */}
-        <button
-          aria-label="Notifications"
-          className="relative rounded-full border p-2 text-gray-600 hover:bg-gray-100"
-        >
-          <Bell className="h-5 w-5" />
-          {/* Notification dot */}
-          <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-[#FF5722]" />
-        </button>
+      {/* Hero Text*/}
+      <div className="text-center mb-10 max-w-4xl mx-auto">
+        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 leading-tight mb-4">
+          Discover Events You'll Love
+        </h1>
+        <p className="text-lg text-gray-600 leading-relaxed">
+          Explore concerts, sports, workshops, and experiences near you. Book
+          tickets instantly and manage everything in one place.
+        </p>
       </div>
 
-      {/* Search & Location */}
-      <div className="mt-5 flex flex-col gap-3 md:flex-row">
-        {/* Search Bar */}
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search events, dates, cities..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && onSearch?.(search)}
-            className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-4 text-sm focus:border-[#FF5722] focus:outline-none focus:ring-1 focus:ring-[#FF5722]"
-          />
-        </div>
-
-        {/* Location Selector */}
-        <div className="relative w-full md:w-64">
-          <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-          <select
-            value={location}
-            onChange={(e) => onLocationChange?.(e.target.value)}
-            className="w-full appearance-none rounded-lg border border-gray-300 py-2 pl-9 pr-4 text-sm focus:border-[#FF5722] focus:outline-none focus:ring-1 focus:ring-[#FF5722]"
-          >
-            <option>New York</option>
-            <option>London</option>
-            <option>Berlin</option>
-            <option>Dubai</option>
-            <option>Online</option>
-          </select>
+      {/* Search Bar */}
+      <div className="max-w-2xl mx-auto">
+        <div className="flex gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search events, venues, artists..."
+              className="w-full pl-12 pr-4 py-4 text-gray-900 placeholder-gray-400 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-[#FF5722] transition-colors"
+            />
+          </div>
+          <button className="px-8 py-4 bg-[#FF5722] hover:bg-[#E64A19] text-white font-semibold rounded-xl transition-colors">
+            Search
+          </button>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

@@ -3,21 +3,26 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Search, Bell, User, Menu, X, LogOut, Settings } from "lucide-react";
+import {
+  Search,
+  Bell,
+  User,
+  Menu,
+  X,
+  LogOut,
+  Settings,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import icon from "@/public/images/tixly-icon.png";
 import Button from "@/components/Button";
+import { useAuth } from "@/contexts/AuthContext";
 
 const AttendeeNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-
-  // Mock user data - replace with actual auth context
-  const user = {
-    name: "John Doe",
-    email: "john@example.com",
-    avatar: "https://i.pravatar.cc/150?u=johndoe",
-  };
+  const { user } = useAuth();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleProfile = () => setIsProfileOpen(!isProfileOpen);
@@ -31,10 +36,7 @@ const AttendeeNavbar = () => {
             <Image src={icon} alt="" width={40} height={40} className="" />
             <h1 className="text-[28px] font-semibold ">Tixly</h1>
           </div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
-            {/* Browse Events */}
+          <div className="hidden md:flex items-center gap-10">
             <Link
               href="/home"
               className="hover:text-black cursor-pointer transition duration-300"
@@ -55,6 +57,11 @@ const AttendeeNavbar = () => {
             >
               My Tickets
             </Link>
+          </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-6">
+            {/* Browse Events */}
 
             {/* Notifications */}
             <button className="relative p-2 text-gray-700 hover:text-[#FF5722] transition-colors">
@@ -64,25 +71,32 @@ const AttendeeNavbar = () => {
 
             {/* Profile Dropdown */}
             <div className="relative">
-              <button
-                onClick={toggleProfile}
-                className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100 transition-colors"
-              >
-                <img
-                  src={user.avatar}
-                  alt={user.name}
+              <div className="flex items-center gap-2 p-1 rounded-full  transition-colors">
+                <Image
+                  src="https://i.pravatar.cc/150?img=59"
+                  alt={user ? user.first_name : ""}
+                  fill
                   className="w-9 h-9 rounded-full border-2 border-gray-200"
                 />
-              </button>
+                <p className="text-sm text-gray-900">
+                  {user?.first_name} {user?.last_name}
+                </p>
+                {isProfileOpen ? (
+                  <ChevronUp
+                    onClick={toggleProfile}
+                    className="text-gray-600 w-5 h-5 cursor-pointer"
+                  />
+                ) : (
+                  <ChevronDown
+                    onClick={toggleProfile}
+                    className="text-gray-600 w-5 h-5 cursor-pointer"
+                  />
+                )}
+              </div>
 
               {/* Dropdown Menu */}
               {isProfileOpen && (
-                <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200 py-2">
-                  <div className="px-4 py-3 border-b border-gray-100">
-                    <p className="font-semibold text-gray-900">{user.name}</p>
-                    <p className="text-sm text-gray-500">{user.email}</p>
-                  </div>
-
+                <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-200 py-2">
                   <Link
                     href="/profile"
                     className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors"
