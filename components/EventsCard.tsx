@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 
 import Image from "next/image";
 import eventimg from "@/public/images/wmremove-transformed.webp";
@@ -17,17 +17,19 @@ import {
   ChevronRight,
   Ticket,
   Shield,
+  BookmarkIcon,
   Zap,
+  BookMarked,
 } from "lucide-react";
 import { Event } from "@/types/event";
+import { useAuth } from "@/contexts/AuthContext";
 
 type EventProps = {
   event: Event;
 };
 
-const isAuthenticated = false;
-
 const EventCard = ({ event }: EventProps) => {
+  const { isAuthenticated } = useAuth();
   const eventDate = new Date(event.startDateTime);
 
   // Format Date for the top-right badge (e.g., "28 SEP")
@@ -71,14 +73,15 @@ const EventCard = ({ event }: EventProps) => {
           alt={event.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
-        <div className="absolute top-3 left-3">
-          <span className="bg-white text-[#FF5722] text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
-            {event.category}
-          </span>
-        </div>
       </div>
 
       <div className="p-5">
+        <div className="flex justify-between items-center mb-1">
+          <p className="text-[14px] font-semibold text-[#FF5722]">
+            {event.category.toUpperCase()}
+          </p>
+          {isAuthenticated ? <BookmarkIcon className="w-5 h-5" /> : ""}
+        </div>
         <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-[#FF5722] transition">
           {event.title}
         </h3>

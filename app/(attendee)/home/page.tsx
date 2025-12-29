@@ -8,7 +8,6 @@ import {
   TrendingUp,
   Users,
   Star,
-  ChevronRight,
   Ticket,
   Shield,
   Zap,
@@ -96,7 +95,7 @@ const Home = async () => {
   return (
     <div className=" ">
       {/* Hero Section */}
-      <section className="relative ">
+      <section className="mt-5">
         <HomeHeader />
       </section>
 
@@ -146,12 +145,11 @@ const Home = async () => {
           </div>
         </section>
       )} */}
+      {/* Upcoming in 24h */}
+      <UpcomingEvents />
 
       {/* New Events */}
       <NewEvents newEvents={newEvents} />
-
-      {/* Upcoming in 24h */}
-      <UpcomingEvents />
 
       {/* Highlight of the Week */}
       {/* {events.length > 0 && (

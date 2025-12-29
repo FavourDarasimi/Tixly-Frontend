@@ -34,14 +34,15 @@ const Button = ({
       </button>
     );
   } else if (type === "secondary") {
-    // return
-    <button
-      disabled
-      className={`border-gray-400 border  ${sizeClasses[size]}    hover:scale-105 transition duration-300 cursor-pointer ${className}`}
-      onClick={onClick}
-    >
-      {children}
-    </button>;
+    return (
+      <button
+        disabled
+        className={`border-gray-400 border  ${sizeClasses[size]}    hover:scale-105 transition duration-300 cursor-pointer ${className}`}
+        onClick={onClick}
+      >
+        {children}
+      </button>
+    );
   } else if (type === "white") {
     return (
       <button

@@ -1,21 +1,44 @@
 "use client";
-
+import React, { useState, useEffect } from "react";
 import { Bell, MapPin, Search } from "lucide-react";
-import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { getUpcomingEvents } from "@/lib/event-api/api";
 
 const HomeHeader = () => {
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
+  const [upcomingEvents, setUpcomingEvents] = useState<number>();
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await getUpcomingEvents();
+        const length = response.this_month.length;
+        setUpcomingEvents(length);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchEvents();
+  }, []);
 
   return (
     <div className="max-w-7xl xl:max-w-[1500px] mx-auto">
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <div>
           {user && (
-            <h1 className=" text-xl font-medium">
-              👋 Welcome back, {user.first_name}!
-            </h1>
+            <div className="space-y-3">
+              <h1 className=" text-3xl font-semibold">
+                👋 Welcome back, {user.first_name}!
+              </h1>
+              <h4 className="text-[">
+                You have{" "}
+                <span className="text-[#FF5722] font-semibold">
+                  {upcomingEvents} upcoming events
+                </span>{" "}
+                this month
+              </h4>
+            </div>
           )}
         </div>
         <div className="flex gap-3">
@@ -26,10 +49,10 @@ const HomeHeader = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search events, venues, artists..."
-              className="w-full pl-12 pr-4 py-4 text-gray-900 placeholder-gray-400 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-[#FF5722] transition-colors"
+              className="w-full pl-12 pr-4 py-3 text-gray-900 placeholder-gray-400 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-[#FF5722] transition-colors"
             />
           </div>
-          <button className="px-8 py-4 bg-[#FF5722] hover:bg-[#E64A19] text-white font-semibold rounded-xl transition-colors">
+          <button className="px-8 py-3 bg-[#FF5722] hover:bg-[#E64A19] text-white font-semibold rounded-xl transition-colors">
             Search
           </button>
         </div>
