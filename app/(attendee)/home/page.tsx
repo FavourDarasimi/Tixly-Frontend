@@ -23,6 +23,7 @@ import UpcomingEvents from "@/components/attendee/home/UpcomingEvents";
 import { getUpcomingEvents, getNewEvents } from "@/lib/event-api/api";
 import HomeHeader from "@/components/attendee/home/HomeHeader";
 import NewEvents from "@/components/attendee/home/NewEvents";
+import { useAuth } from "@/contexts/AuthContext";
 
 // Categories
 const CATEGORIES = [
@@ -72,9 +73,6 @@ const Home = async () => {
   // const [events, setEvents] = useState<Event[]>([]);
   // const [isLoading, setIsLoading] = useState(true);
 
-  const upcoming_response = await getUpcomingEvents();
-  const upcomingEvents = upcoming_response.results;
-
   const new_response = await getNewEvents();
   const newEvents = new_response.results;
 
@@ -95,19 +93,8 @@ const Home = async () => {
     });
   };
 
-  // const filteredEvents =
-  //   selectedCategory === "all"
-  //     ? events
-  //     : events.filter(
-  //         (event) =>
-  //           event.category.toLowerCase() === selectedCategory.toLowerCase()
-  //       );
-
-  // const trendingEvents = events.filter((e) => e.isFeatured).slice(0, 3);
-  // const upcomingEvents = events.slice(0, 2);
-
   return (
-    <div className="min-h-screen ">
+    <div className=" ">
       {/* Hero Section */}
       <section className="relative ">
         <HomeHeader />
@@ -164,7 +151,7 @@ const Home = async () => {
       <NewEvents newEvents={newEvents} />
 
       {/* Upcoming in 24h */}
-      <UpcomingEvents upcomingEvents={upcomingEvents} />
+      <UpcomingEvents />
 
       {/* Highlight of the Week */}
       {/* {events.length > 0 && (

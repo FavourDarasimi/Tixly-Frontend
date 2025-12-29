@@ -1,19 +1,28 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Calendar, Clock, ChevronRight } from "lucide-react";
 import eventimg from "@/public/images/wmremove-transformed.webp";
 import { Event } from "@/types/event";
+import { getUpcomingEvents, getNewEvents } from "@/lib/event-api/api";
 
-type EventArray = {
-  upcomingEvents: Event[];
-};
+const UpcomingEvents = () => {
+  const [upcomingEvents, setUpcomingEvents] = useState<Event[]>();
 
-const UpcomingEvents = async ({ upcomingEvents }: EventArray) => {
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await getUpcomingEvents();
+        setUpcomingEvents(response.results);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchEvents();
+  }, []);
+
   // If no events, return null early
-  if (upcomingEvents.length === 0) {
-    return null;
-  }
 
   const formatDate = (dateString: string) => {
     if (!dateString) return "";
@@ -55,56 +64,57 @@ const UpcomingEvents = async ({ upcomingEvents }: EventArray) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto">
-          {upcomingEvents.slice(0, 2).map((event: Event) => {
-            const eventDate = event.startDateTime || event.date || "";
+          {upcomingEvents &&
+            upcomingEvents.slice(0, 2).map((event: Event) => {
+              const eventDate = event.startDateTime || "";
 
-            return (
-              <Link
-                key={event.id}
-                href={`/events/${event.id}`}
-                className="group bg-white border-2 border-orange-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all"
-              >
-                <div className="flex gap-5 p-6">
-                  <div className="w-32 h-32 shrink-0 rounded-xl overflow-hidden bg-gray-100">
-                    <Image
-                      src={eventimg}
-                      alt={event.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <div className="inline-block bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-3">
-                      Starting Soon
+              return (
+                <Link
+                  key={event.id}
+                  href={`/events/${event.id}`}
+                  className="group bg-white border-2 border-orange-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all"
+                >
+                  <div className="flex gap-5 p-6">
+                    <div className="w-32 h-32 shrink-0 rounded-xl overflow-hidden bg-gray-100">
+                      <Image
+                        src={eventimg}
+                        alt={event.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
                     </div>
 
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-[#FF5722] transition">
-                      {event.title}
-                    </h3>
+                    <div className="flex-1 min-w-0">
+                      <div className="inline-block bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-3">
+                        Starting Soon
+                      </div>
 
-                    <div className="space-y-1.5 text-sm text-gray-700 mb-3">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-[#FF5722]" />
-                        <span>{formatDate(eventDate)}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-[#FF5722]" />
-                        <span>
-                          {event.startDateTime
-                            ? event.startDateTime
-                            : event.time}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-[#FF5722]" />
-                        <span className="line-clamp-1">{event.location}</span>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-[#FF5722] transition">
+                        {event.title}
+                      </h3>
+
+                      <div className="space-y-1.5 text-sm text-gray-700 mb-3">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-[#FF5722]" />
+                          <span>{formatDate(eventDate)}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-4 h-4 text-[#FF5722]" />
+                          <span>
+                            {event.startDateTime
+                              ? event.startDateTime
+                              : event.time}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-[#FF5722]" />
+                          <span className="line-clamp-1">{event.location}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            );
-          })}
+                </Link>
+              );
+            })}
         </div>
       </div>
     </section>

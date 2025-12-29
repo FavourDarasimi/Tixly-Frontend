@@ -30,9 +30,9 @@ export type Event = {
   category: string;
 
   // Dates
-  date: string;
+
   time?: string;
-  startDateTime?: string;
+  startDateTime: string;
   endDateTime?: string;
 
   // Location

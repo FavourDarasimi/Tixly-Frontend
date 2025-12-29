@@ -9,7 +9,7 @@ const HomeHeader = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <div className="max-w-7xl xl:max-w-[1500px]">
+    <div className="max-w-7xl xl:max-w-[1500px] mx-auto">
       <div className="flex justify-between">
         <div>
           {user && (

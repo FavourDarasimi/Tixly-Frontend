@@ -28,7 +28,7 @@ type EventProps = {
 const isAuthenticated = false;
 
 const EventCard = ({ event }: EventProps) => {
-  const eventDate = new Date(event.date);
+  const eventDate = new Date(event.startDateTime);
 
   // Format Date for the top-right badge (e.g., "28 SEP")
   const day = eventDate.getDate();
@@ -86,7 +86,7 @@ const EventCard = ({ event }: EventProps) => {
         <div className="space-y-1.5 text-sm text-gray-600 mb-3">
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-[#FF5722]" />
-            <span>{formatDate(event.date)}</span>
+            <span>{formatDate(event.startDateTime)}</span>
           </div>
           <div className="flex items-center gap-2">
             <MapPin className="w-4 h-4 text-[#FF5722]" />

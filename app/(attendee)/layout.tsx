@@ -13,7 +13,7 @@ export default function AttendeeLayout({
     <ProtectedRoute allowedRoles={["attendee"]}>
       <section className="flex flex-col min-h-screen">
         <AttendeeNavbar />
-        <main className="flex-1 pt-16">{children}</main>
+        <main className="flex-1 ">{children}</main>
         <Footer />
       </section>
     </ProtectedRoute>

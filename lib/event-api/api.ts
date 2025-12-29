@@ -1,4 +1,11 @@
+import Cookies from "js-cookie";
+import axios from "axios";
 const BASEURL = "http://localhost:8000/api";
+
+const api = axios.create({
+  baseURL: "http://localhost:8000", // or your API URL
+  withCredentials: true, // CRITICAL: This sends cookies with requests
+});
 
 export async function getEvents() {
   try {
@@ -59,13 +66,9 @@ export async function getTrendingEvents() {
 
 export async function getUpcomingEvents() {
   try {
-    const token =
-      typeof window !== "undefined"
-        ? localStorage.getItem("access_token")
-        : null;
     const response = await fetch(`${BASEURL}/events/upcoming/`, {
       method: "GET",
-      credentials: "include",
+      credentials: "include", // ✅ Always include for authenticated requests
       headers: {
         "Content-Type": "application/json",
       },
@@ -80,7 +83,6 @@ export async function getUpcomingEvents() {
     throw error;
   }
 }
-
 export async function getNewEvents() {
   try {
     // Get events created in the last 7 days

@@ -1,10 +1,7 @@
-// contexts/AuthContext.tsx or wherever your auth context is
-
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie"; // Make sure to install: npm install js-cookie @types/js-cookie
 
 interface User {
   id: string;
@@ -33,35 +30,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // Check if user is authenticated on mount
   useEffect(() => {
     const checkAuth = async () => {
-      const accessToken = Cookies.get("access_token");
-
-      if (accessToken) {
-        try {
-          // Fetch user details
-          const response = await fetch(
-            "http://localhost:8000/api/auth/users/me/",
-            {
-              credentials: "include", // Send cookies
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-
-          if (response.ok) {
-            const userData = await response.json();
-            setUser(userData);
-          } else {
-            // Token invalid, clear cookies
-            Cookies.remove("access_token");
-            Cookies.remove("refresh_token");
+      try {
+        // Don't manually read cookies - let the browser send them automatically
+        const response = await fetch(
+          "http://localhost:8000/api/auth/users/me/",
+          {
+            credentials: "include", // ✅ Send cookies automatically
+            headers: {
+              "Content-Type": "application/json",
+            },
+            // ❌ REMOVED: Authorization header - we're using cookies!
           }
-        } catch (error) {
-          console.error("Auth check error:", error);
-        }
-      }
+        );
 
-      setIsLoading(false);
+        if (response.ok) {
+          const userData = await response.json();
+
+          setUser(userData);
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Auth check error:", error);
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     checkAuth();
@@ -71,10 +65,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const BASEURL = "http://localhost:8000/api";
 
-      // Step 1: Get JWT tokens (this will set cookies)
+      // Step 1: Login and set cookies
       const loginResponse = await fetch(`${BASEURL}/auth/jwt/create/`, {
         method: "POST",
-        credentials: "include", // IMPORTANT: Receive cookies
+        credentials: "include", // ✅ Receive cookies from server
         headers: {
           "Content-Type": "application/json",
         },
@@ -86,14 +80,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         throw new Error(errorData.detail || "Invalid credentials");
       }
 
-      const { access, refresh } = await loginResponse.json();
+      const loginData = await loginResponse.json();
+      console.log("✅ Login successful:", loginData.message);
 
-      console.log("✅ Login successful, cookies should be set");
-      console.log("Check DevTools → Application → Cookies");
-
-      // Step 2: Get user details using the token
+      // Step 2: Fetch user details (cookies sent automatically)
       const userResponse = await fetch(`${BASEURL}/auth/users/me/`, {
-        credentials: "include", // Send cookies
+        credentials: "include", // ✅ Send cookies automatically
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
       if (!userResponse.ok) {
@@ -122,14 +117,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // Call logout endpoint to clear cookies on server
       await fetch("http://localhost:8000/api/auth/logout/", {
         method: "POST",
-        credentials: "include",
+        credentials: "include", // ✅ Send cookies for logout
       });
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
-      // Clear cookies on client side too
-      Cookies.remove("access_token");
-      Cookies.remove("refresh_token");
       setUser(null);
       router.push("/login");
     }

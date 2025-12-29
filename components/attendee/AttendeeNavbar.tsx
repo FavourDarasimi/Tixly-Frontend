@@ -22,7 +22,7 @@ const AttendeeNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navRef = useRef<HTMLDivElement>(null);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -50,6 +50,19 @@ const AttendeeNavbar = () => {
       document.body.style.overflow = "unset";
     };
   }, [isMenuOpen, isProfileOpen]);
+
+  useEffect(() => {
+    if (!navRef.current) return;
+
+    const setPadding = () => {
+      document.body.style.paddingTop = `${navRef.current!.offsetHeight}px`;
+    };
+
+    setPadding();
+    window.addEventListener("resize", setPadding);
+
+    return () => window.removeEventListener("resize", setPadding);
+  }, []);
 
   return (
     <nav
@@ -141,7 +154,10 @@ const AttendeeNavbar = () => {
                   </Link>
 
                   <div className="border-t border-gray-100 mt-2 pt-2">
-                    <button className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors w-full text-left text-red-600">
+                    <button
+                      onClick={logout}
+                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors w-full text-left text-red-600"
+                    >
                       <LogOut className="w-5 h-5" />
                       <span>Log Out</span>
                     </button>
@@ -214,7 +230,10 @@ const AttendeeNavbar = () => {
                 Settings
               </Link>
 
-              <button className="text-left text-red-600 font-medium hover:text-red-700 transition-colors">
+              <button
+                onClick={logout}
+                className="text-left text-red-600 font-medium hover:text-red-700 transition-colors"
+              >
                 Log Out
               </button>
             </div>
