@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface ProtectedRouteProps {
@@ -15,6 +15,7 @@ const ProtectedRoute = ({
 }: ProtectedRouteProps) => {
   const { user, isLoading, isAuthenticated } = useAuth();
   const router = useRouter();
+  const path = usePathname();
 
   useEffect(() => {
     if (!isLoading) {
@@ -22,6 +23,14 @@ const ProtectedRoute = ({
       if (!isAuthenticated) {
         router.push("/login");
         return;
+      }
+
+      if (user && isAuthenticated && path == "/") {
+        // if (user.role === "attendee") {
+        router.push("/home");
+        // } else if (user.role === "organizer") {
+        //   router.push("/dashboard");
+        // }
       }
 
       // Authenticated but wrong role - redirect to appropriate page
@@ -37,7 +46,7 @@ const ProtectedRoute = ({
         }
       }
     }
-  }, [user, isLoading, isAuthenticated, allowedRoles, router]);
+  }, [user, isLoading, isAuthenticated, allowedRoles, router, path]);
 
   // Show loading state
   if (isLoading) {

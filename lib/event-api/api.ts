@@ -103,7 +103,7 @@ export async function getNewEvents() {
   }
 }
 
-export async function getEventDetails(id: number) {
+export async function getEventDetails(id: string) {
   try {
     const response = await fetch(`${BASEURL}/event/${id}/`, {
       method: "GET",

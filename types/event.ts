@@ -9,9 +9,59 @@ export type Organizer = {
   avatar?: string;
 };
 
+export type Speaker = {
+  id: number;
+  name: string;
+  title: string;
+  image: string;
+  profile_image: string;
+  email: string;
+};
+
+export type Schedule = {
+  id: string; // UUID
+
+  title: string;
+  description: string;
+
+  session_type:
+    | "keynote"
+    | "talk"
+    | "panel"
+    | "workshop"
+    | "break"
+    | "networking"
+    | "lunch"
+    | "registration"
+    | "other";
+  date: string;
+  start_time: string;
+  end_time: string;
+  order: number;
+  speakers: Speaker[];
+  event_day: string | null;
+  duration_minutes: number | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type EventDay = {
+  id: string;
+  title: string;
+  description: string;
+  dayNumber: number;
+  date: string;
+  startTime: string;
+  endTime: string;
+  schedules: Schedule[];
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type TicketTier = {
   id: number;
   name: string;
+  short_description: string;
   price: number;
   event: number;
   total_tickets: number;
@@ -24,53 +74,32 @@ export type TicketTier = {
 
 export type Event = {
   id: number;
+
   title: string;
+  short_description: string;
   description: string;
-  image?: string;
   category: string;
-
-  // Dates
-
-  time?: string;
-  startDateTime: string;
-  endDateTime?: string;
-
-  // Location
+  image: string;
   location: string;
-  latitude?: number;
-  longitude?: number;
-
-  // Pricing
-  min_price?: number;
-  max_price?: number;
-  price?: number;
-  currency?: string;
-
-  // Tickets
-  available_tickets?: number;
-  ticket_tiers?: TicketTier[];
-
-  // Status
-  status?: "draft" | "published" | "cancelled" | "completed";
-
-  // Relations
+  startDateTime: string;
+  endDateTime: string;
+  created_at: string;
   organizer: Organizer;
-
-  // Featured & Trending
-  is_featured?: boolean;
-  isFeatured?: boolean;
-  featured_priority?: number;
-  is_trending?: boolean;
-  trending_score?: number;
-
-  // Metrics
-  views_count?: number;
-  ticket_sales_count?: number;
-  saved_count?: number;
-
-  // Timestamps
-  created_at?: string;
-  updated_at?: string;
+  ticket_tiers: TicketTier[];
+  available_tickets: number;
+  min_price: number | null;
+  max_price: number | null;
+  status: "draft" | "published" | "cancelled" | "completed";
+  is_multi_day: boolean;
+  duration_days: number;
+  is_currently_happening: boolean;
+  has_schedule: boolean;
+  schedule_count: number;
+  latitude: string;
+  longitude: string;
+  event_days: EventDay[];
+  speakers: Speaker[];
+  schedules: Schedule[];
 };
 
 export type EventListResponse = {

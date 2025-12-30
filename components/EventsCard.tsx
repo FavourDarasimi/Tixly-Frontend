@@ -64,13 +64,14 @@ const EventCard = ({ event }: EventProps) => {
   return (
     <Link
       key={event.id}
-      href={`/events/${event.id}`}
+      href={`/event/${event.id}`}
       className="group bg-white rounded-2xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all hover:-translate-y-1"
     >
       <div className="aspect-video relative overflow-hidden bg-gray-100">
         <Image
-          src={eventimg}
+          src={event.image}
           alt={event.title}
+          fill
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
       </div>
