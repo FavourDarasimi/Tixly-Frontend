@@ -45,7 +45,7 @@ const EventBookingSideBar = ({ data }: EventDetails) => {
         <div className="border-t border-t-gray-200 my-8" />
         <div>
           <div className="flex justify-between items-center">
-            <p className="text-gray-500">Total</p>
+            <p className="text-gray-500">Total :</p>
             <h1 className="font-semibold text-[26px]">${tierSelectedPrice}</h1>
           </div>
         </div>

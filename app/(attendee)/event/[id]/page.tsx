@@ -10,8 +10,9 @@ const EventDetails = async ({
 }) => {
   const { id } = await params;
   const response = await getEventDetails(id);
+  console.log(response);
   return (
-    <div className="pb-10">
+    <div className="pb-10 min-h-screen">
       <Header data={response} />
       <main className="flex p-10 gap-32 bg-slate-50">
         <div className="w-[75%]">

@@ -39,7 +39,7 @@ export type Schedule = {
   end_time: string;
   order: number;
   speakers: Speaker[];
-  event_day: string | null;
+  event_day: EventDay | null;
   duration_minutes: number | null;
   created_at: string;
   updated_at: string;

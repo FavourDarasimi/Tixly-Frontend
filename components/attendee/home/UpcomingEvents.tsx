@@ -22,7 +22,6 @@ const UpcomingEvents = () => {
     const fetchEvents = async () => {
       try {
         const response = await getUpcomingEvents();
-        console.log(response);
         setUpcomingEvents(response.all);
       } catch (error) {
         console.error(error);
