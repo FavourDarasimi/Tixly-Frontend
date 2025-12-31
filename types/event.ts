@@ -95,8 +95,8 @@ export type Event = {
   is_currently_happening: boolean;
   has_schedule: boolean;
   schedule_count: number;
-  latitude: string;
-  longitude: string;
+  latitude: number;
+  longitude: number;
   event_days: EventDay[];
   speakers: Speaker[];
   schedules: Schedule[];

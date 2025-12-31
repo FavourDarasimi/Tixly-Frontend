@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Event } from "@/types/event";
 import {
@@ -19,12 +19,17 @@ import {
   Zap,
 } from "lucide-react";
 import EventCard from "@/components/EventsCard";
+import { getUpcomingEvents, getNewEvents } from "@/lib/event-api/api";
 
 type EventArray = {
   newEvents: Event[];
 };
 
 const NewEvents = ({ newEvents }: EventArray) => {
+  if (newEvents?.length == 0) {
+    return null;
+  }
+
   return (
     <section className="py-16 ">
       <div className="max-w-7xl xl:max-w-[1500px]  mx-auto px-6">
@@ -44,22 +49,12 @@ const NewEvents = ({ newEvents }: EventArray) => {
           </Link>
         </div>
 
-        {newEvents.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-2xl border-2 border-dashed border-gray-300">
-            <p className="text-gray-600 text-lg mb-4">
-              No events found in this category
-            </p>
-            <button className="text-[#FF5722] font-semibold hover:underline">
-              View all events
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {newEvents.slice(0, 8).map((event) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-          </div>
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {newEvents &&
+            newEvents
+              .slice(0, 8)
+              .map((event) => <EventCard key={event.id} event={event} />)}
+        </div>
       </div>
     </section>
   );

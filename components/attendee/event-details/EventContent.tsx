@@ -84,7 +84,7 @@ const EventContent = ({ data }: EventDetails) => {
           {data.description}
         </p>
       </div>
-      <div className="mt-10">
+      <div className="mt-20">
         <h1 className="text-[27px] font-semibold">Speakers</h1>
         <div className="mt-5 flex gap-5">
           {data.speakers.map((speaker, index) => (
@@ -105,7 +105,7 @@ const EventContent = ({ data }: EventDetails) => {
           ))}
         </div>
       </div>
-      <div className="mt-10">
+      <div className="mt-20">
         <div className="flex justify-between items-center">
           <h1 className="text-[27px] font-semibold">
             {data.is_multi_day ? `Day ${dayNumber} Schedule` : "Schedule"}
@@ -115,7 +115,7 @@ const EventContent = ({ data }: EventDetails) => {
               <h1
                 key={index}
                 onClick={() => getScheuleForEventDay(day.dayNumber)}
-                className={`rounded-full px-4 py-1 cursor-pointer transition-colors duration-[400ms] ${
+                className={`rounded-full px-4 py-1 cursor-pointer transition-colors duration-400 ${
                   dayNumber == day.dayNumber
                     ? "bg-[#FF5722] border border-transparent text-white"
                     : "border border-gray-300"
@@ -127,29 +127,9 @@ const EventContent = ({ data }: EventDetails) => {
           </div>
         </div>
         <div>
-          {/* {data.is_multi_day ?}
-          {schedules.map((schedule, index) => (
-            <div key={index} className="bg-white rounded-4xl mb-5 w-[35%] p-5">
-              <div className="flex justify-between items-center">
-                <p className="text-[#FF5722] font-semibold">
-                  {formatTime(schedule.start_time)}
-                </p>
-                <p className="text-[#757E8B] bg-gray-200/70 px-2 rounded-full tx-[15px]">
-                  {schedule.session_type}
-                </p>
-              </div>
-              <h1 className="text-[18px] font-semibold my-1 line-clamp-1">
-                {schedule.title}
-              </h1>
-              <h3 className=" text-[#757E8B] font-medium">
-                {schedule.description}
-              </h3>
-            </div>
-          ))} */}
-
           <div className="relative">
             {/* Vertical Timeline Line */}
-            <div className="absolute left-[43%] top-0 bottom-0 w-[2px] bg-gray-200"></div>
+            <div className="absolute left-[43%] top-0 bottom-0 w-0.5 bg-gray-200"></div>
 
             {/* Schedule Items */}
             {schedules.map((schedule, index) => {
@@ -163,7 +143,7 @@ const EventContent = ({ data }: EventDetails) => {
                     <div className="flex items-start gap-4">
                       {/* Content Card - LEFT */}
                       <div className="w-[40%]">
-                        <div className="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                        <div className="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md hover:scale-105 duration-300 transition">
                           <div className="flex items-start justify-between mb-2">
                             <p className="text-[#FF5722] text-[15px] font-semibold">
                               {formatTime(schedule.start_time)}
@@ -235,7 +215,7 @@ const EventContent = ({ data }: EventDetails) => {
 
                       {/* Content Card - RIGHT */}
                       <div className="w-[40%]">
-                        <div className="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                        <div className="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md hover:scale-105 duration-300 transition">
                           <div className="flex items-start justify-between mb-2">
                             <p className="text-[#FF5722] text-[15px] font-semibold">
                               {formatTime(schedule.start_time)}

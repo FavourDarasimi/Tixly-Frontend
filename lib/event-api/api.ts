@@ -64,14 +64,16 @@ export async function getTrendingEvents() {
   }
 }
 
-export async function getUpcomingEvents() {
+export async function getUpcomingEvents(cookieString?: string) {
   try {
     const response = await fetch(`${BASEURL}/events/upcoming/`, {
       method: "GET",
       credentials: "include", // ✅ Always include for authenticated requests
       headers: {
+        ...(cookieString ? { Cookie: cookieString } : {}),
         "Content-Type": "application/json",
       },
+      cache: "no-store",
     });
 
     if (!response.ok) {

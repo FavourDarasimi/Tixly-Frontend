@@ -12,26 +12,12 @@ import {
 } from "lucide-react";
 import eventimg from "@/public/images/wmremove-transformed.webp";
 import { Event } from "@/types/event";
-import { getUpcomingEvents } from "@/lib/event-api/api";
-import Button from "@/components/Button";
 
-const UpcomingEvents = () => {
-  const [upcomingEvents, setUpcomingEvents] = useState<Event[]>();
+type EventArray = {
+  upcomingEvents: Event[];
+};
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await getUpcomingEvents();
-        setUpcomingEvents(response.all);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchEvents();
-  }, []);
-
-  // If no events, return null early
-
+const UpcomingEvents = ({ upcomingEvents }: EventArray) => {
   const formatDate = (dateString: string) => {
     if (!dateString) return "";
     const date = new Date(dateString);

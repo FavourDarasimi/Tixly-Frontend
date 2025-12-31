@@ -4,23 +4,13 @@ import { Bell, MapPin, Search } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { getUpcomingEvents } from "@/lib/event-api/api";
 
-const HomeHeader = () => {
+type EventLength = {
+  upcomingEvents: number;
+};
+
+const HomeHeader = ({ upcomingEvents }: EventLength) => {
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
-  const [upcomingEvents, setUpcomingEvents] = useState<number>();
-
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await getUpcomingEvents();
-        const length = response.this_month.length;
-        setUpcomingEvents(length);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchEvents();
-  }, []);
 
   return (
     <div className="max-w-7xl xl:max-w-[1500px] mx-auto">

@@ -17,12 +17,13 @@ import Link from "next/link";
 
 import eventimg from "@/public/images/wmremove-transformed.webp";
 
-import { getEvents } from "@/lib/event-api/api";
+import { getNewEvents, getUpcomingEvents } from "@/lib/event-api/api";
 import UpcomingEvents from "@/components/attendee/home/UpcomingEvents";
-import { getUpcomingEvents, getNewEvents } from "@/lib/event-api/api";
+
 import HomeHeader from "@/components/attendee/home/HomeHeader";
 import NewEvents from "@/components/attendee/home/NewEvents";
 import { useAuth } from "@/contexts/AuthContext";
+import { cookies } from "next/headers";
 
 // Categories
 const CATEGORIES = [
@@ -71,9 +72,15 @@ const Home = async () => {
   // const [selectedCategory, setSelectedCategory] = useState("all");
   // const [events, setEvents] = useState<Event[]>([]);
   // const [isLoading, setIsLoading] = useState(true);
+  const cookieStore = await cookies();
+  const cookieString = cookieStore.toString();
 
-  const new_response = await getNewEvents();
-  const newEvents = new_response.results;
+  const response = await getUpcomingEvents(cookieString);
+  const data = response.next_24_hours;
+  const header_data = response.this_month.length;
+
+  const response2 = await getNewEvents();
+  const newEvents = response2.results;
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -96,7 +103,7 @@ const Home = async () => {
     <div className=" ">
       {/* Hero Section */}
       <section className="mt-5">
-        <HomeHeader />
+        <HomeHeader upcomingEvents={header_data} />
       </section>
 
       {/* Top Trending Events */}
@@ -146,7 +153,7 @@ const Home = async () => {
         </section>
       )} */}
       {/* Upcoming in 24h */}
-      <UpcomingEvents />
+      <UpcomingEvents upcomingEvents={data} />
 
       {/* New Events */}
       <NewEvents newEvents={newEvents} />
