@@ -13,7 +13,7 @@ const MyTickets = async () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-[27px] font-semibold">My Tickets</h1>
-          <p>Manage your upcoming and pase events</p>
+          <p>Manage your upcoming and past events</p>
         </div>
         <div className="flex text-[#FF5722] gap-1 items-center">
           <CalendarPlus className="w-[18px] h-[18px]" />

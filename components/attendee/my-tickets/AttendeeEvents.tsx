@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Event } from "@/types/event";
-import { MapPin, QrCode, Clock } from "lucide-react";
+import { MapPin, QrCode, Clock, Info } from "lucide-react";
 import Link from "next/link";
 import TicketView from "./TicketView";
 
@@ -13,6 +13,7 @@ type AttendeeEvents = {
 
 const AttendeeEvents = ({ upcomingEvents, pastEvents }: AttendeeEvents) => {
   const [filtered, setFiltered] = useState("upcoming");
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const events = filtered === "upcoming" ? upcomingEvents : pastEvents;
 
   const getDateParts = (dateString: string) => {
@@ -46,7 +47,7 @@ const AttendeeEvents = ({ upcomingEvents, pastEvents }: AttendeeEvents) => {
           }`}
           onClick={() => setFiltered("upcoming")}
         >
-          Upcoming({upcomingEvents.length})
+          Upcoming ({upcomingEvents.length})
         </h1>
         <h1
           className={`border-b-3 pb-2 font-semibold w-fit cursor-pointer transition-colors duration-400 ${
@@ -56,7 +57,7 @@ const AttendeeEvents = ({ upcomingEvents, pastEvents }: AttendeeEvents) => {
           }`}
           onClick={() => setFiltered("past")}
         >
-          Past({pastEvents.length})
+          Past ({pastEvents.length})
         </h1>
       </div>
 
@@ -66,7 +67,7 @@ const AttendeeEvents = ({ upcomingEvents, pastEvents }: AttendeeEvents) => {
           return (
             <div
               key={event.id}
-              className="flex border border-gray-200 p-3 rounded-2xl justify-between items-center"
+              className="flex border border-gray-200 p-3 rounded-2xl justify-between items-center hover:shadow-md transition-shadow"
             >
               <div className="flex items-center gap-10">
                 <div className="bg-[#FF5722]/20  text-center text-[#FF5722]  rounded-[20px] w-fit py-3.5 px-5">
@@ -95,22 +96,36 @@ const AttendeeEvents = ({ upcomingEvents, pastEvents }: AttendeeEvents) => {
                 </div>
               </div>
               <div className="flex gap-3">
-                <button className="flex items-center font-medium gap-2 rounded-lg border border-transparent bg-[#FF5722] text-white py-1.5 px-4 text-[14px]">
+                <button
+                  onClick={() => setSelectedEvent(event)}
+                  className="cursor-pointer flex items-center font-medium gap-2 rounded-lg border border-transparent bg-[#FF5722] text-white py-1.5 px-4 text-[14px] hover:bg-[#E64A19] transition-colors"
+                >
                   <QrCode className="w-4 h-4" />
                   View Ticket
                 </button>
                 <Link href={`/event/${event.id}`}>
-                  <button className="flex  items-center font-medium gap-2 rounded-lg border border-gray-300 py-1.5 px-4 text-[14px]">
-                    <QrCode className="w-4 h-4" />
+                  <button className="cursor-pointer flex  items-center font-medium gap-2 rounded-lg border border-gray-300 py-1.5 px-4 text-[14px] hover:bg-gray-50 transition-colors">
+                    <Info className="w-4 h-4" />
                     View Event Details
                   </button>
                 </Link>
               </div>
-              {/* <TicketView id={event.id} /> */}
             </div>
           );
         })}
       </div>
+
+      {/* Ticket Modal */}
+      {selectedEvent && (
+        <TicketView
+          id={selectedEvent.id}
+          isOpen={!!selectedEvent}
+          onClose={() => setSelectedEvent(null)}
+          eventTitle={selectedEvent.title}
+          eventDate={selectedEvent.startDateTime}
+          eventLocation={selectedEvent.location}
+        />
+      )}
     </div>
   );
 };

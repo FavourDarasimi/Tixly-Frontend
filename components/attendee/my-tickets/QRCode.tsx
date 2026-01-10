@@ -1,7 +1,6 @@
 "use client";
 
 import { QRCodeCanvas } from "qrcode.react";
-import { useState } from "react";
 
 type Props = {
   uuid: string;
@@ -9,14 +8,14 @@ type Props = {
 
 export default function QRCode({ uuid }: Props) {
   return (
-    <div style={{ textAlign: "center" }}>
-      <p>{uuid}</p>
+    <div className="flex flex-col items-center justify-center">
       <QRCodeCanvas
         value={uuid}
-        size={200}
+        size={256}
         bgColor="#ffffff"
         fgColor="#000000"
-        level="M"
+        level="H"
+        includeMargin={true}
       />
     </div>
   );
