@@ -3,7 +3,7 @@ import Button from "@/components/Button";
 import EventMap from "@/components/EventMap";
 import ShareEventCard from "@/components/attendee/event-details/ShareEventCard";
 import { Event } from "@/types/event";
-import { constants } from "fs";
+
 import { useState } from "react";
 import { MapPinHouse } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -14,7 +14,9 @@ type EventDetails = {
 const EventBookingSideBar = ({ data }: EventDetails) => {
   const { isAuthenticated } = useAuth();
   const [tierSelected, setTierSelected] = useState(0);
-  const [tierSelectedPrice, setTierSelectedPrice] = useState(0);
+  const [tierSelectedPrice, setTierSelectedPrice] = useState(
+    data.ticket_tiers?.[0]?.price || 0
+  );
 
   const tierClick = (index: number, price: number) => {
     setTierSelected(index);

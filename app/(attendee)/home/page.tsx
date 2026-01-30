@@ -1,71 +1,29 @@
-import {
-  Search,
-  MapPin,
-  Calendar,
-  Clock,
-  Heart,
-  Share2,
-  TrendingUp,
-  Users,
-  Star,
-  Ticket,
-  Shield,
-  Zap,
-} from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
+import { LayoutGrid, Music, Trophy, Mic, Hammer, Flag,  Monitor, MoreHorizontal, Clapperboard, Lightbulb } from "lucide-react";
 
-import eventimg from "@/public/images/wmremove-transformed.webp";
-
-import { getNewEvents, getUpcomingEvents } from "@/lib/event-api/api";
+import { getNewEvents, getUpcomingEvents, getSavedEvents, getRecommendedEvents } from "@/lib/event-api/api";
 import UpcomingEvents from "@/components/attendee/home/UpcomingEvents";
+import SavedEvents from "@/components/attendee/home/SavedEvents";
+import RecommendedEvents from "@/components/attendee/home/RecommendedEvents";
 
 import HomeHeader from "@/components/attendee/home/HomeHeader";
 import NewEvents from "@/components/attendee/home/NewEvents";
-import { useAuth } from "@/contexts/AuthContext";
 import { cookies } from "next/headers";
 
 // Categories
 const CATEGORIES = [
-  { id: "all", label: "All", icon: "🎯" },
-  { id: "music", label: "Music", icon: "🎵" },
-  { id: "sport", label: "Sport", icon: "⚽" },
-  { id: "exhibition", label: "Exhibition", icon: "🎨" },
-  { id: "business", label: "Business", icon: "💼" },
-  { id: "photography", label: "Photography", icon: "📷" },
+  { id: "all", label: "All", icon: <LayoutGrid className="w-8 h-8" /> },
+  { id: "music", label: "Music", icon: <Music className="w-8 h-8" /> },
+  { id: "sports", label: "Sports", icon: <Trophy className="w-8 h-8" /> },
+  { id: "conference", label: "Conference", icon: <Mic className="w-8 h-8" /> },
+  { id: "workshop", label: "Workshop", icon: <Lightbulb className="w-8 h-8" /> },
+  { id: "festival", label: "Festival", icon: <Flag className="w-8 h-8" /> },
+  { id: "theater", label: "Theater", icon: <Clapperboard className="w-8 h-8" /> },
+  { id: "tech", label: "Tech", icon: <Monitor className="w-8 h-8" /> },
+  { id: "other", label: "Other", icon: <MoreHorizontal className="w-8 h-8" /> },
 ];
 
-// Why choose us features
-const FEATURES = [
-  {
-    icon: <Zap className="w-6 h-6" />,
-    title: "Instant Booking",
-    description: "Book tickets in seconds with our seamless checkout process",
-  },
-  {
-    icon: <Shield className="w-6 h-6" />,
-    title: "Secure Payments",
-    description: "Your transactions are protected with bank-level security",
-  },
-  {
-    icon: <Ticket className="w-6 h-6" />,
-    title: "QR Code Tickets",
-    description: "Get instant access with digital tickets on your phone",
-  },
-  {
-    icon: <Users className="w-6 h-6" />,
-    title: "Trusted by Thousands",
-    description: "Join our community of event enthusiasts",
-  },
-];
 
-// Stats
-const STATS = [
-  { number: "10K+", label: "Events Hosted" },
-  { number: "50K+", label: "Happy Attendees" },
-  { number: "500+", label: "Event Organizers" },
-  { number: "4.8/5", label: "Average Rating" },
-];
 
 const Home = async () => {
   // const [selectedLocation, setSelectedLocation] = useState("Lagos, Nigeria");
@@ -81,6 +39,12 @@ const Home = async () => {
 
   const response2 = await getNewEvents();
   const newEvents = response2.results;
+
+  const savedEvents = await getSavedEvents(cookieString);
+
+  // Fetch recommended events
+ const recommendedEvents = await getRecommendedEvents(cookieString);
+ 
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -109,57 +73,41 @@ const Home = async () => {
       {/* Upcoming in 24h */}
       <UpcomingEvents upcomingEvents={data} />
 
-      {/* New Events */}
-      <NewEvents newEvents={newEvents} />
-
-      {/* Why Choose Us */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">
-              Why Choose <span className="text-[#FF5722]">Tixly</span>?
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              We make discovering and attending events easier than ever
-            </p>
+      {/* Categories */}
+      <section className="py-8 bg-gray-50/50">
+        <div className="max-w-[1500px] mx-auto px-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-gray-900">Browse Categories</h2>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {FEATURES.map((feature, index) => (
-              <div
-                key={index}
-                className="text-center p-6 rounded-2xl border border-gray-200 hover:border-[#FF5722] hover:shadow-lg transition-all group"
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-9 gap-4">
+            {CATEGORIES.map((category) => (
+              <Link
+                key={category.id}
+                href={`/events?category=${category.id}`}
+                className="flex flex-col items-center justify-center p-6 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#FF5722]/30 transition-all cursor-pointer group"
               >
-                <div className="w-14 h-14 bg-orange-50 rounded-xl flex items-center justify-center mx-auto mb-4 text-[#FF5722] group-hover:bg-[#FF5722] group-hover:text-white transition-colors">
-                  {feature.icon}
+                <div className="mb-3 text-[#FF5722] group-hover:scale-110 transition-transform duration-300">
+                  {category.icon}
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-sm text-gray-600">{feature.description}</p>
-              </div>
+                <span className="font-medium text-gray-700 group-hover:text-[#FF5722]">
+                  {category.label}
+                </span>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 bg-[#FF5722]">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ready to Experience Amazing Events?
-          </h2>
-          <p className="text-white/90 text-lg mb-8">
-            Join thousands of event-goers and never miss out on great
-            experiences
-          </p>
-          <Link href="/events">
-            <button className="bg-white text-[#FF5722] hover:bg-gray-100 font-bold py-4 px-8 rounded-xl transition-all hover:scale-105 shadow-lg">
-              Explore All Events
-            </button>
-          </Link>
-        </div>
-      </section>
+      {/* Recommended Events */}
+      <RecommendedEvents recommendedEvents={recommendedEvents} />
+
+      {/* Saved Events */}
+      <SavedEvents savedEvents={savedEvents} />
+
+      {/* New Events */}
+      <NewEvents newEvents={newEvents} />
+
+      
     </div>
   );
 };

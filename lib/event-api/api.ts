@@ -167,3 +167,49 @@ export async function getUserEventTicket(id: number, cookieString?: string) {
     throw error;
   }
 }
+
+
+export async function getSavedEvents(cookieString?: string) {
+  try {
+    const response = await fetch(`${BASEURL}/events/saved/`, {
+      method: "GET",
+      credentials: "include", // ✅ Always include for authenticated requests
+      headers: {
+        ...(cookieString ? { Cookie: cookieString } : {}),
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw errorData;
+    }
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getRecommendedEvents(cookieString?: string) {
+  try {
+    const response = await fetch(`${BASEURL}/events/recommended/`, {
+      method: "GET",
+      credentials: "include", // ✅ Always include for authenticated requests
+      headers: {
+        ...(cookieString ? { Cookie: cookieString } : {}),
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw errorData;
+    }
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+}
+

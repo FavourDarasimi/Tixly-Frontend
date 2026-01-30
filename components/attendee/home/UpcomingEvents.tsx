@@ -50,7 +50,22 @@ const UpcomingEvents = ({ upcomingEvents }: EventArray) => {
   };
 
   if (upcomingEvents?.length == 0) {
-    return null;
+    return (
+       <section className="py-16 bg-gray-50/30">
+        <div className="max-w-7xl xl:max-w-[1500px] mx-auto px-6 text-center">
+            <Ticket className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+             <h2 className="text-2xl font-bold text-gray-900 mb-2">No Upcoming Events</h2>
+             <p className="text-gray-500 mb-6">You don't have any upcoming events scheduled.</p>
+             <Link
+              href="/events"
+              className="inline-flex items-center gap-2 bg-[#FF5722] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#F4511E] transition-colors"
+            >
+              Find Events
+              <ChevronRight className="w-5 h-5" />
+            </Link>
+        </div>
+      </section>
+    );
   }
   return (
     <section className="py-16">
@@ -77,7 +92,7 @@ const UpcomingEvents = ({ upcomingEvents }: EventArray) => {
               const eventDate = event.startDateTime || "";
 
               return (
-                <div className="flex  p-6 mx-20 w-full h-full ">
+                <div className="flex  p-6 mx-20 w-full h-full " key={event.id}>
                   <div className="w-1/2 h-60 shrink-0 rounded-l-xl overflow-hidden bg-gray-100">
                     <Image
                       src={eventimg}
@@ -113,7 +128,7 @@ const UpcomingEvents = ({ upcomingEvents }: EventArray) => {
                         <QrCode className="w-4 h-4" />
                         View Ticket
                       </button>
-                      <Link key={event.id} href={`/events/${event.id}`}>
+                      <Link key={event.id} href={`/event/${event.id}`}>
                         <button className="cursor-pointer flex text-[#FF5722] bg-[#FF5722]/10 items-center font-medium gap-2 rounded-lg border border-gray-300 py-2 px-4 text-[15px]">
                           <Info className="w-4 h-4" />
                           View Event Details
