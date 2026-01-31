@@ -81,7 +81,6 @@ const EventCard = ({ event }: EventProps) => {
           <p className="text-[14px] font-semibold text-[#FF5722]">
             {event.category.toUpperCase()}
           </p>
-          {isAuthenticated ? <BookmarkIcon className="w-5 h-5" /> : ""}
         </div>
         <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-[#FF5722] transition">
           {event.title}

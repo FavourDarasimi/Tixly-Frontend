@@ -213,3 +213,27 @@ export async function getRecommendedEvents(cookieString?: string) {
   }
 }
 
+
+export async function saveEvent(event_id: string | number) {
+  try {
+     const cookieStore =  Cookies.get('csrftoken')
+    const response = await fetch(`${BASEURL}/events/saved/`, {
+      method: "POST",
+      credentials: "include", // ✅ Always include for authenticated requests
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": cookieStore || "",
+      },
+      body: JSON.stringify({ event_id }),
+    });
+
+    if (!response.ok) {
+        
+      const errorData = await response.json();
+      throw errorData;
+    }
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+}

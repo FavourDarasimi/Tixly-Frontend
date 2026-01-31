@@ -24,22 +24,15 @@ const EventContent = ({ data }: EventDetails) => {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
 
   useEffect(() => {
-    if (data.is_multi_day) {
-      setSchedules(
-        data.schedules.filter(
-          (schedule) => schedule.event_day?.dayNumber == dayNumber
-        )
-      );
-    } else {
-      setSchedules(data.schedules);
+    if (data.event_days && data.event_days.length > 0) {
+       const day = data.event_days.find(d => d.dayNumber === dayNumber);
+       setSchedules(day?.schedules || []);
     }
   }, []);
 
   const getScheuleForEventDay = (day: number) => {
-    const daySchedules = data.schedules.filter(
-      (schedule) => schedule.event_day?.dayNumber == day
-    );
-    setSchedules(daySchedules);
+    const dayData = data.event_days.find(d => d.dayNumber === day);
+     setSchedules(dayData?.schedules || []);
     setDayNumber(day);
   };
 

@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { LayoutGrid, Music, Trophy, Mic, Hammer, Flag,  Monitor, MoreHorizontal, Clapperboard, Lightbulb } from "lucide-react";
 
-import { getNewEvents, getUpcomingEvents, getSavedEvents, getRecommendedEvents } from "@/lib/event-api/api";
+import { getNewEvents, getUpcomingEvents, getSavedEvents, getRecommendedEvents, getTrendingEvents } from "@/lib/event-api/api";
 import UpcomingEvents from "@/components/attendee/home/UpcomingEvents";
 import SavedEvents from "@/components/attendee/home/SavedEvents";
 import RecommendedEvents from "@/components/attendee/home/RecommendedEvents";
+import TrendingEvents from "@/components/attendee/home/TrendingEvents";
 
 import HomeHeader from "@/components/attendee/home/HomeHeader";
 import NewEvents from "@/components/attendee/home/NewEvents";
@@ -45,6 +46,8 @@ const Home = async () => {
   // Fetch recommended events
  const recommendedEvents = await getRecommendedEvents(cookieString);
  
+ // Fetch trending events
+ const trendingEvents = await getTrendingEvents();
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -73,6 +76,8 @@ const Home = async () => {
       {/* Upcoming in 24h */}
       <UpcomingEvents upcomingEvents={data} />
 
+      
+      
       {/* Categories */}
       <section className="py-8 bg-gray-50/50">
         <div className="max-w-[1500px] mx-auto px-6">
@@ -97,6 +102,9 @@ const Home = async () => {
           </div>
         </div>
       </section>
+
+      {/* Trending Events */}
+      <TrendingEvents trendingEvents={trendingEvents} />
 
       {/* Recommended Events */}
       <RecommendedEvents recommendedEvents={recommendedEvents} />

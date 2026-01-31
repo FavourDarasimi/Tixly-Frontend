@@ -99,7 +99,8 @@ export type Event = {
   longitude: number;
   event_days: EventDay[];
   speakers: Speaker[];
-  schedules: Schedule[];
+  schedules?: Schedule[];
+  is_saved: boolean;
 };
 
 export type EventListResponse = {

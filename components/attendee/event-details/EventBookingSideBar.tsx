@@ -5,8 +5,9 @@ import ShareEventCard from "@/components/attendee/event-details/ShareEventCard";
 import { Event } from "@/types/event";
 
 import { useState } from "react";
-import { MapPinHouse } from "lucide-react";
+import { Heart, MapPinHouse } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { saveEvent } from "@/lib/event-api/api";
 
 type EventDetails = {
   data: Event;
@@ -17,6 +18,23 @@ const EventBookingSideBar = ({ data }: EventDetails) => {
   const [tierSelectedPrice, setTierSelectedPrice] = useState(
     data.ticket_tiers?.[0]?.price || 0
   );
+  
+  const [isSaved, setIsSaved] = useState(data.is_saved);
+
+  const handleSave = async () => {
+    if (!isAuthenticated) return;
+    
+    // Optimistic update
+    setIsSaved(!isSaved);
+    
+    try {
+        await saveEvent(data.id);
+    } catch (error) {
+        console.error("Failed to save event", error);
+        // Revert on failure
+        setIsSaved(isSaved);
+    }
+  }
 
   const tierClick = (index: number, price: number) => {
     setTierSelected(index);
@@ -77,8 +95,16 @@ const EventBookingSideBar = ({ data }: EventDetails) => {
             </Button>
           </div>
         </div>
-      ) : (
-        ""
+      ) : null}
+
+      {isAuthenticated && (
+         <div 
+          onClick={handleSave}
+          className={`w-full py-4 rounded-full mt-3 border flex items-center justify-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95 ${isSaved ? 'border-[#FF5722] text-[#FF5722] bg-[#FF5722]/5' : 'border-gray-300 text-gray-700 hover:border-gray-400'}`}
+        >
+          <Heart className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} />
+          <span className="font-semibold text-lg">{isSaved ? "Saved" : "Save Event"}</span>
+        </div>
       )}
 
       <div className="w-full bg-white rounded-4xl h-fit p-7 text-black  shadow-md">
