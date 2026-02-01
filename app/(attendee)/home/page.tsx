@@ -35,7 +35,7 @@ const Home = async () => {
   const cookieString = cookieStore.toString();
 
   const response = await getUpcomingEvents(cookieString);
-  const data = response.next_24_hours;
+  const data = response.all;
   const header_data = response.this_month.length;
 
   const response2 = await getNewEvents();

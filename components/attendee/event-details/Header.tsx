@@ -132,7 +132,9 @@ const Header = ({ data }: EventDetails) => {
             className="rounded-full flex gap-5 items-center"
           >
             <Ticket />
-            Get Tickets - From ${data.min_price}
+            {data.min_price && data.min_price > 0
+              ? `Get Tickets - From $${data.min_price}`
+              : "Get Tickets - Free"}
           </Button>
         </div>
       </div>

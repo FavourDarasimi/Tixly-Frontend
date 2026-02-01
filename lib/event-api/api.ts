@@ -7,13 +7,14 @@ const api = axios.create({
   withCredentials: true, // CRITICAL: This sends cookies with requests
 });
 
-export async function getEvents() {
+export async function getEvents(query: string = "") {
   try {
-    const response = await fetch(`${BASEURL}/events/`, {
+    const response = await fetch(`${BASEURL}/events/${query}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
+      cache: "no-store",
     });
 
     if (!response.ok) {

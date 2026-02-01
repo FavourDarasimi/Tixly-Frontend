@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Bell, MapPin, Search } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { getUpcomingEvents } from "@/lib/event-api/api";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type EventLength = {
   upcomingEvents: number;
@@ -10,7 +11,15 @@ type EventLength = {
 
 const HomeHeader = ({ upcomingEvents }: EventLength) => {
   const { user } = useAuth();
+    const router = useRouter();
+    const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
+  const search = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("search", searchQuery);
+    params.delete("page");
+    router.push(`/events?${params.toString()}`);
+  }
 
   return (
     <div className="max-w-7xl xl:max-w-[1500px] mx-auto">
@@ -42,7 +51,7 @@ const HomeHeader = ({ upcomingEvents }: EventLength) => {
               className="w-full pl-12 pr-4 py-3 text-gray-900 placeholder-gray-400 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-[#FF5722] transition-colors"
             />
           </div>
-          <button className="px-8 py-3 bg-[#FF5722] hover:bg-[#E64A19] text-white font-semibold rounded-xl transition-colors">
+          <button onClick={search} className="px-8 py-3 bg-[#FF5722] hover:bg-[#E64A19] text-white font-semibold rounded-xl transition-colors">
             Search
           </button>
         </div>
