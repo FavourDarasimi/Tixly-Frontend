@@ -1,11 +1,5 @@
 import Cookies from "js-cookie";
-import axios from "axios";
-const BASEURL = "http://localhost:8000/api";
-
-const api = axios.create({
-  baseURL: "http://localhost:8000", // or your API URL
-  withCredentials: true, // CRITICAL: This sends cookies with requests
-});
+import { API_BASE_URL as BASEURL } from "@/lib/api-base";
 
 export async function getEvents(query: string = "") {
   try {
@@ -15,25 +9,6 @@ export async function getEvents(query: string = "") {
         "Content-Type": "application/json",
       },
       cache: "no-store",
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw errorData;
-    }
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function getFeaturedEvents() {
-  try {
-    const response = await fetch(`${BASEURL}/events/featured/`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
 
     if (!response.ok) {

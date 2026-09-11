@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -9,13 +9,17 @@ interface ProtectedRouteProps {
   allowedRoles?: ("attendee" | "organizer")[];
 }
 
+const DEFAULT_ROLES: ("attendee" | "organizer")[] = ["attendee", "organizer"];
+
 const ProtectedRoute = ({
   children,
-  allowedRoles = ["attendee", "organizer"],
+  allowedRoles = DEFAULT_ROLES,
 }: ProtectedRouteProps) => {
   const { user, isLoading, isAuthenticated } = useAuth();
   const router = useRouter();
   const path = usePathname();
+  // Stabilize the array identity so the effect below doesn't re-run every render
+  const allowedRolesKey = useMemo(() => allowedRoles.join(","), [allowedRoles]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -26,19 +30,12 @@ const ProtectedRoute = ({
       }
 
       if (user && isAuthenticated && path == "/") {
-        // if (user.role === "attendee") {
-        router.push("/home");
-        // } else if (user.role === "organizer") {
-        //   router.push("/dashboard");
-        // }
+        router.push(user.role === "organizer" ? "/dashboard" : "/home");
       }
 
       // Authenticated but wrong role - redirect to appropriate page
-      if (
-        user &&
-        allowedRoles.length > 0 &&
-        !allowedRoles.includes(user.role)
-      ) {
+      const allowed = allowedRolesKey.split(",") as ("attendee" | "organizer")[];
+      if (user && allowed.length > 0 && !allowed.includes(user.role)) {
         if (user.role === "attendee") {
           router.push("/home");
         } else if (user.role === "organizer") {
@@ -46,7 +43,7 @@ const ProtectedRoute = ({
         }
       }
     }
-  }, [user, isLoading, isAuthenticated, allowedRoles, router, path]);
+  }, [user, isLoading, isAuthenticated, allowedRolesKey, router, path]);
 
   // Show loading state
   if (isLoading) {
@@ -60,9 +57,13 @@ const ProtectedRoute = ({
     );
   }
 
-  // Show nothing while redirecting
+  // Show a message while redirecting (instead of a blank screen)
   if (!isAuthenticated || (user && !allowedRoles.includes(user.role))) {
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-600">Redirecting…</p>
+      </div>
+    );
   }
 
   // Render protected content

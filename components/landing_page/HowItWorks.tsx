@@ -109,22 +109,25 @@ const HowItWorks: React.FC = () => {
   };
 
   return (
-    <section id="how-it-works" className="py-24 bg-white overflow-hidden">
-      <div className="max-w-7xl xl:max-w-[1500px] mx-auto px-6 lg:px-8">
+    <section id="how-it-works" className="py-20 sm:py-24 overflow-hidden">
+      <div className="max-w-6xl mx-auto px-6 lg:px-8">
         {/* Header */}
-        <div className="flex flex-col items-center text-center mb-16">
-          <h2 className="text-4xl  font-bold text-slate-900 mb-4">
-            How Tixly Works
+        <div className="flex flex-col items-center text-center mb-12">
+          <p className="rounded-full border border-[#e7ded2] bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-stone-500">
+            How it works
+          </p>
+          <h2 className="font-display mt-3 text-4xl sm:text-5xl font-extrabold tracking-tight text-stone-900 mb-3">
+            Made for going out
           </h2>
-          <p className="text-lg text-slate-600  mb-10">
-            A seamless experience built for both the people partying and the
-            people planning.
+          <p className="text-[17px] text-stone-500  mb-8 max-w-xl">
+            A calmer way to discover, book, and walk in — for the people
+            partying and the people planning.
           </p>
 
           {/* Toggle */}
-          <div className="relative inline-flex bg-slate-100 p-1.5 rounded-full shadow-inner">
+          <div className="relative inline-flex bg-white border border-[#e7ded2] p-1.5 rounded-full shadow-sm">
             <div
-              className="absolute top-1.5 bottom-1.5 bg-white rounded-full shadow-sm transition-all duration-300"
+              className="absolute top-1.5 bottom-1.5 bg-stone-900 rounded-full shadow-sm transition-all duration-300"
               style={{
                 width: "calc(50% - 12px)",
                 left: userType === "attendee" ? "6px" : "calc(50% + 6px)",
@@ -134,7 +137,7 @@ const HowItWorks: React.FC = () => {
             <button
               onClick={() => handleToggle("attendee")}
               className={`cursor-pointer relative z-10 w-[140px] py-2.5 text-sm font-semibold transition-colors ${
-                userType === "attendee" ? "text-slate-900" : "text-slate-500"
+                userType === "attendee" ? "text-white" : "text-stone-500"
               }`}
             >
               Attendee
@@ -143,7 +146,7 @@ const HowItWorks: React.FC = () => {
             <button
               onClick={() => handleToggle("organizer")}
               className={`cursor-pointer relative z-10 w-[140px] py-2.5 text-sm font-semibold transition-colors ${
-                userType === "organizer" ? "text-slate-900" : "text-slate-500"
+                userType === "organizer" ? "text-white" : "text-stone-500"
               }`}
             >
               Organizer
@@ -166,7 +169,7 @@ const HowItWorks: React.FC = () => {
                 style={{
                   transitionDelay: isAnimating ? "0ms" : `${index * 80}ms`,
                 }}
-                className="group relative overflow-hidden rounded-3xl border border-[#E2E8F0] bg-white p-8 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl hover:shadow-slate-200/60"
+                className="group relative overflow-hidden rounded-3xl border border-[#e7ded2] bg-white p-8 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_28px_60px_-28px_rgba(28,25,23,0.35)]"
               >
                 {/* Hover Gradient */}
                 <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-[#FF5722]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

@@ -1,5 +1,3 @@
-import React from "react";
-import eventimg from "@/public/images/wmremove-transformed.webp";
 import EventCard from "../EventsCard";
 import { Event } from "@/types/event";
 
@@ -9,13 +7,18 @@ type EventArray = {
 
 const TrendingEvents = async ({ events }: EventArray) => {
   return (
-    <section className="max-w-7xl xl:max-w-[1500px] mx-auto px-4 py-14">
+    <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
       {/* Section Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-end items-start justify-between gap-4 mb-8">
         <div>
-          <h2 className="text-4xl font-bold text-gray-900">Upcoming Events</h2>
-          <p className="text-gray-600 mt-1 text-lg">
-            Discover what's happening near you and plan ahead.
+          <p className="inline-flex items-center rounded-full border border-[#e7ded2] bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-stone-500">
+            Fresh this week
+          </p>
+          <h2 className="font-display mt-3 text-4xl sm:text-5xl font-extrabold tracking-tight text-stone-900">
+            Upcoming events
+          </h2>
+          <p className="text-stone-500 mt-2 text-[16px]">
+            Less scrolling, more showing up. Here’s what your crowd is doing.
           </p>
         </div>
 

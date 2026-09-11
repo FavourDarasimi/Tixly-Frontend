@@ -88,24 +88,27 @@ export default function FeaturesSection() {
   const [userType, setUserType] = useState<UserType>("attendee");
 
   return (
-    <section id="features" className="py-24 ">
-      <div className="max-w-7xl xl:max-w-[1500px] mx-auto px-6">
+    <section id="features" className="py-20 sm:py-24 ">
+      <div className="max-w-6xl mx-auto px-6">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <h2 className="text-4xl font-bold text-slate-900 mb-4">
-            Powerful Features for Everyone
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <p className="inline-flex rounded-full border border-[#e7ded2] bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-stone-500">
+            Why Tixly
+          </p>
+          <h2 className="font-display mt-3 text-4xl sm:text-5xl font-extrabold tracking-tight text-stone-900 mb-4">
+            Everything for a good night out
           </h2>
-          <p className="text-slate-600 text-lg">
-            Whether you’re attending or organizing, Tixly gives you the tools to
-            move fast and stay in control.
+          <p className="text-stone-500 text-[17px]">
+            Whether you’re showing up or setting up, Tixly keeps it warm,
+            fast, and human.
           </p>
         </div>
 
         {/* Toggle */}
-        <div className="flex justify-center mb-12">
-          <div className="relative inline-flex bg-slate-100 p-1.5 rounded-full shadow-inner">
+        <div className="flex justify-center mb-10">
+          <div className="relative inline-flex bg-white border border-[#e7ded2] p-1.5 rounded-full shadow-sm">
             <div
-              className="absolute top-1.5 bottom-1.5 bg-white rounded-full shadow-sm transition-all duration-300"
+              className="absolute top-1.5 bottom-1.5 bg-stone-900 rounded-full shadow-sm transition-all duration-300"
               style={{
                 width: "calc(50% - 12px)",
                 left: userType === "attendee" ? "6px" : "calc(50% + 6px)",
@@ -116,7 +119,7 @@ export default function FeaturesSection() {
                 key={type}
                 onClick={() => setUserType(type as UserType)}
                 className={`cursor-pointer relative z-10 w-[140px] py-2.5 text-sm font-semibold transition-colors ${
-                  userType === type ? "text-slate-900" : "text-slate-500"
+                  userType === type ? "text-white" : "text-stone-500"
                 }`}
               >
                 {type === "attendee" ? "Attendees" : "Organizers"}
@@ -133,7 +136,7 @@ export default function FeaturesSection() {
           {FEATURES[userType].map((feature, idx) => (
             <div
               key={idx}
-              className="bg-white rounded-2xl border border-slate-200 p-8 hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
+              className="bg-white rounded-3xl border border-[#e7ded2] p-8 hover:-translate-y-1 hover:shadow-[0_28px_60px_-28px_rgba(28,25,23,0.35)] transition-all duration-300"
             >
               <div className="w-12 h-12 rounded-xl bg-[#FF5722]/10 text-[#FF5722] flex items-center justify-center mb-6">
                 {feature.icon}

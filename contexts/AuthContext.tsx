@@ -2,9 +2,10 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { API_BASE_URL } from "@/lib/api-base";
 
 interface User {
-  id: string;
+  id: number;
   email: string;
   username: string;
   first_name: string;
@@ -22,6 +23,29 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+/** POST to the refresh endpoint (refresh JWT lives in an HttpOnly cookie). */
+async function tryRefresh(): Promise<boolean> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/auth/jwt/refresh/`, {
+      method: "POST",
+      credentials: "include",
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+/** fetch with credentials + one silent refresh-and-retry on 401. */
+async function authedFetch(input: string, init?: RequestInit): Promise<Response> {
+  const res = await fetch(input, { ...init, credentials: "include" });
+  if (res.status !== 401) return res;
+  if (await tryRefresh()) {
+    return fetch(input, { ...init, credentials: "include" });
+  }
+  return res;
+}
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,14 +56,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const checkAuth = async () => {
       try {
         // Don't manually read cookies - let the browser send them automatically
-        const response = await fetch(
-          "http://localhost:8000/api/auth/users/me/",
+        const response = await authedFetch(
+          `${API_BASE_URL}/auth/users/me/`,
           {
-            credentials: "include", // ✅ Send cookies automatically
             headers: {
               "Content-Type": "application/json",
             },
-            // ❌ REMOVED: Authorization header - we're using cookies!
           }
         );
 
@@ -63,10 +85,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const BASEURL = "http://localhost:8000/api";
-
       // Step 1: Login and set cookies
-      const loginResponse = await fetch(`${BASEURL}/auth/jwt/create/`, {
+      const loginResponse = await fetch(`${API_BASE_URL}/auth/jwt/create/`, {
         method: "POST",
         credentials: "include", // ✅ Receive cookies from server
         headers: {
@@ -84,7 +104,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log("✅ Login successful:", loginData.message);
 
       // Step 2: Fetch user details (cookies sent automatically)
-      const userResponse = await fetch(`${BASEURL}/auth/users/me/`, {
+      const userResponse = await fetch(`${API_BASE_URL}/auth/users/me/`, {
         credentials: "include", // ✅ Send cookies automatically
         headers: {
           "Content-Type": "application/json",
@@ -106,7 +126,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } else {
         router.push("/");
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error("Login error:", error);
       throw error;
     }
@@ -115,7 +135,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = async () => {
     try {
       // Call logout endpoint to clear cookies on server
-      await fetch("http://localhost:8000/api/auth/logout/", {
+      await fetch(`${API_BASE_URL}/auth/logout/`, {
         method: "POST",
         credentials: "include", // ✅ Send cookies for logout
       });

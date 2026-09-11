@@ -10,7 +10,7 @@ const Home = async () => {
   const response = await getEvents();
   const events = response.results;
   return (
-    <section className="">
+    <section className="bg-[#faf7f2] text-stone-900 antialiased">
       <HeroSection />
       <TrendingEvents events={events} />
       <HowItWorks />

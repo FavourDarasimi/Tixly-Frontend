@@ -1,6 +1,6 @@
-const BASEURL = "http://localhost:8000/api";
+import { API_BASE_URL as BASEURL } from "@/lib/api-base";
 
-export async function signup(formData: any) {
+export async function signup(formData: Record<string, string>) {
   try {
     const response = await fetch(`${BASEURL}/auth/users/`, {
       method: "POST",
@@ -20,10 +20,11 @@ export async function signup(formData: any) {
   }
 }
 
-export async function login(formData: any) {
+export async function login(formData: Record<string, string>) {
   try {
     const response = await fetch(`${BASEURL}/auth/jwt/create/`, {
       method: "POST",
+      credentials: "include", // required so the cookie JWTs are stored
       headers: {
         "Content-Type": "application/json",
       },

@@ -147,16 +147,19 @@ const FAQ = () => {
   };
 
   return (
-    <div id="faqs" className="min-h-screen  py-24 px-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl  font-bold text-gray-900 mb-4">
-            Frequently asked questions
+    <div id="faqs" className="py-20 sm:py-24 px-4 sm:px-6">
+      <div className="max-w-3xl mx-auto">
+        <div className="text-center mb-10">
+          <p className="inline-flex rounded-full border border-[#e7ded2] bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-stone-500">
+            Good questions
+          </p>
+          <h1 className="font-display mt-3 text-4xl sm:text-5xl font-extrabold tracking-tight text-stone-900 mb-4">
+            Asked by your crowd
           </h1>
-          <p className="text-gray-600 text-lg">
-            These are the most commonly asked questions about our platform.
+          <p className="text-stone-500 text-[17px]">
+            The short answers, minus the fine print.
             <br />
-            Can't find what you're looking for?{" "}
+            Still curious?{" "}
             <a
               href="#contact"
               className="text-[#FF5722] hover:underline font-medium"
@@ -174,10 +177,10 @@ const FAQ = () => {
                 setActiveTab(tab.id);
                 setOpenQuestion(null);
               }}
-              className={`px-6 py-2.5 rounded-full font-medium transition-all ${
+              className={`px-6 py-2.5 rounded-full font-medium transition-all cursor-pointer ${
                 activeTab === tab.id
-                  ? "bg-gray-900 text-white shadow-lg"
-                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                  ? "bg-stone-900 text-white shadow-lg"
+                  : "bg-white text-stone-600 hover:bg-stone-100 border border-[#e7ded2]"
               }`}
             >
               {tab.label}
@@ -189,7 +192,7 @@ const FAQ = () => {
           {faqs[activeTab].map((faq) => (
             <div
               key={faq.id}
-              className="bg-white rounded-xl border border-gray-200 overflow-hidden transition-all hover:shadow-md"
+              className="bg-white rounded-2xl border border-[#e7ded2] overflow-hidden transition-all hover:shadow-[0_20px_44px_-24px_rgba(28,25,23,0.35)]"
             >
               <button
                 onClick={() => toggleQuestion(faq.id)}

@@ -1,8 +1,15 @@
 "use client";
 import Button from "@/components/Button";
-import EventMap from "@/components/EventMap";
 import ShareEventCard from "@/components/attendee/event-details/ShareEventCard";
 import { Event } from "@/types/event";
+import dynamic from "next/dynamic";
+
+const EventMap = dynamic(() => import("@/components/EventMap"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[200px] w-full rounded-[10px] bg-gray-100 animate-pulse" />
+  ),
+});
 
 import { useState } from "react";
 import { Heart, MapPinHouse } from "lucide-react";
@@ -14,11 +21,17 @@ type EventDetails = {
 };
 const EventBookingSideBar = ({ data }: EventDetails) => {
   const { isAuthenticated } = useAuth();
+  const tiers = data.ticket_tiers ?? [];
   const [tierSelected, setTierSelected] = useState(0);
   const [tierSelectedPrice, setTierSelectedPrice] = useState(
-    data.ticket_tiers?.[0]?.price || 0
+    tiers?.[0]?.price || 0
   );
-  
+
+  // window is unavailable during SSR/prerender - resolve lazily on the client
+  const [pageUrl] = useState(() =>
+    typeof window === "undefined" ? "" : window.location.href
+  );
+
   const [isSaved, setIsSaved] = useState(data.is_saved);
 
   const handleSave = async () => {
@@ -55,9 +68,9 @@ const EventBookingSideBar = ({ data }: EventDetails) => {
           <div className=" ">
             <h1 className="font-semibold text-xl mb-6">Select Tickets</h1>
             <div className="space-y-5 ">
-              {data.ticket_tiers.map((tier, index) => (
+              {tiers.map((tier, index) => (
                 <div
-                  key={index}
+                  key={tier.id ?? index}
                   onClick={() => tierClick(index, tier.price)}
                   className={`flex justify-between items-start py-4 px-4 transition-colors duration-400ms cursor-pointer border ${
                     tierSelected == index
@@ -89,10 +102,14 @@ const EventBookingSideBar = ({ data }: EventDetails) => {
             <Button
               type="primary"
               size="large"
-              className="w-full rounded-full mt-3"
+              className="w-full rounded-full mt-3 opacity-50 cursor-not-allowed"
+              disabled
             >
-              Checkout
+              Checkout (coming soon)
             </Button>
+            <p className="text-center text-xs text-gray-500 mt-2">
+              Online checkout isn&apos;t available yet.
+            </p>
           </div>
         </div>
       ) : null}
@@ -130,7 +147,7 @@ const EventBookingSideBar = ({ data }: EventDetails) => {
         </p>
       </div>
 
-      <ShareEventCard eventTitle={data.title} eventUrl={window.location.href} />
+      <ShareEventCard eventTitle={data.title} eventUrl={pageUrl} />
     </div>
   );
 };

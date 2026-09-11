@@ -28,11 +28,13 @@ const Signup = () => {
   const [showRePassword, setShowRePassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  const isValidRole = role === "attendee" || role === "organizer";
+
   useEffect(() => {
-    if (!role) {
+    if (!isValidRole) {
       router.push("/join");
     }
-  }, [role, router]);
+  }, [isValidRole, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -87,35 +89,35 @@ const Signup = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setFormErrors([]);
 
-    if (validateForm()) {
-      try {
-        // We pass the raw object (formData), NOT a string
-        const data = await signup(formData);
-
-        // If we get here, it worked!
-        console.log("Success:", data);
-        setTimeout(() => {
-          setIsSubmitting(false);
-          router.push("/login");
-        }, 3000);
-      } catch (err: any) {
-        // If the function threw an error, we catch it here and show the user
-        console.log(err);
-        if (typeof err === "object" && err !== null) {
-          const messages = Object.values(err).flat() as string[];
-          setFormErrors(messages);
-        } else {
-          // Fallback for network errors
-          setFormErrors(["Something went wrong. Please try again."]);
-        }
-        setIsSubmitting(false);
-      }
+    if (!validateForm()) {
+      setIsSubmitting(false);
+      return;
     }
-    setIsSubmitting(false);
+
+    try {
+      // We pass the raw object (formData), NOT a string
+      const data = await signup(formData);
+
+      // If we get here, it worked!
+      console.log("Success:", data);
+      router.push("/login");
+    } catch (err: unknown) {
+      // If the function threw an error, we catch it here and show the user
+      console.log(err);
+      if (typeof err === "object" && err !== null) {
+        const messages = Object.values(err).flat() as string[];
+        setFormErrors(messages);
+      } else {
+        // Fallback for network errors
+        setFormErrors(["Something went wrong. Please try again."]);
+      }
+      setIsSubmitting(false);
+    }
   };
 
-  if (!role) {
+  if (!isValidRole) {
     return null;
   }
 

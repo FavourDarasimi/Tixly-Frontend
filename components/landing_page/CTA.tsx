@@ -1,40 +1,45 @@
 import Link from "next/link";
-import { FaArrowRight } from "react-icons/fa";
-import Button from "../Button";
+import { ArrowUpRight } from "lucide-react";
 
 const CTA = () => {
   return (
-    <section className="relative overflow-hidden py-24">
-      {/* Background */}
-      <div className="absolute inset-0 bg-[#FF5722]" />
-      <div className="absolute inset-0 bg-linear-to-br from-[#FF5722] via-[#FF6A3D] to-[#FF8A65] opacity-90" />
-
-      <div className="relative max-w-7xl xl:max-w-[1500px] mx-auto px-6 text-center">
-        {/* Content */}
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-          Ready to Experience Events the Better Way?
+    <section className="px-4 sm:px-6 pb-20">
+      <div className="relative overflow-hidden rounded-[28px] bg-stone-950 px-6 py-16 sm:py-20 text-center max-w-6xl mx-auto">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(30rem 16rem at 50% -4rem, rgba(255,87,34,0.45), transparent 65%), radial-gradient(24rem 18rem at 90% 110%, rgba(255,138,101,0.25), transparent 60%)",
+          }}
+        />
+        <p className="relative inline-flex rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-white/70">
+          Join 12,000+ hosts & goers
+        </p>
+        <h2 className="font-display relative mx-auto mt-4 max-w-2xl text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-[1.02]">
+          Your crowd is already out. <span className="text-[#FF6A3D]">Come through.</span>
         </h2>
 
-        <p className="text-white/90 text-lg max-w-2xl mx-auto mb-10">
-          Discover events, buy tickets in seconds, or host your own event with
-          powerful tools and real-time insights.
+        <p className="relative text-white/70 text-[17px] max-w-xl mx-auto mt-4">
+          Discover something tonight, or host it yourself — tickets, QR
+          check-ins, and payouts handled.
         </p>
 
-        {/* Actions */}
-        <Link href="/join">
-          <Button
-            type="white"
-            size="large"
-            className=" rounded-full group inline-flex gap-2 items-center font-semibold text-[#FF5722]"
+        <div className="relative mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Link
+            href="/join"
+            className="group inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-[#FF5722] px-7 py-4 text-[15px] font-semibold text-white transition hover:bg-[#E64A19] hover:-translate-y-px"
           >
-            Get Started for free
-            <FaArrowRight
-              size={12}
-              className="sm:w-4 sm:h-4 group-hover:ml-2 group-hover:mr-0 mr-2 transition-all duration-300 "
-              color="#FF5722"
-            />
-          </Button>
-        </Link>
+            Get started for free
+            <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </Link>
+          <Link
+            href="/events"
+            className="inline-flex w-full sm:w-auto items-center justify-center rounded-xl border border-white/20 bg-white/5 px-7 py-4 text-[15px] font-semibold text-white transition hover:bg-white/10"
+          >
+            Browse events
+          </Link>
+        </div>
       </div>
     </section>
   );

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LayoutGrid, Music, Trophy, Mic, Hammer, Flag,  Monitor, MoreHorizontal, Clapperboard, Lightbulb } from "lucide-react";
+import { LayoutGrid, Music, Trophy, Mic, Flag,  Monitor, MoreHorizontal, Clapperboard, Lightbulb } from "lucide-react";
 
 import { getNewEvents, getUpcomingEvents, getSavedEvents, getRecommendedEvents, getTrendingEvents } from "@/lib/event-api/api";
 import UpcomingEvents from "@/components/attendee/home/UpcomingEvents";
@@ -34,37 +34,22 @@ const Home = async () => {
   const cookieStore = await cookies();
   const cookieString = cookieStore.toString();
 
-  const response = await getUpcomingEvents(cookieString);
-  const data = response.all;
-  const header_data = response.this_month.length;
+  // Fetch in parallel; fall back to empty sections so one failing
+  // API doesn't whitescreen the whole dashboard.
+  const [upcoming, fresh, saved, recommended, trending] = await Promise.all([
+    getUpcomingEvents(cookieString).catch(() => ({ all: [], this_month: [] })),
+    getNewEvents().catch(() => ({ results: [] })),
+    getSavedEvents(cookieString).catch(() => []),
+    getRecommendedEvents(cookieString).catch(() => []),
+    getTrendingEvents().catch(() => []),
+  ]);
 
-  const response2 = await getNewEvents();
-  const newEvents = response2.results;
-
-  const savedEvents = await getSavedEvents(cookieString);
-
-  // Fetch recommended events
- const recommendedEvents = await getRecommendedEvents(cookieString);
- 
- // Fetch trending events
- const trendingEvents = await getTrendingEvents();
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
-  const formatTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-    });
-  };
+  const data = upcoming.all ?? [];
+  const header_data = upcoming.this_month?.length ?? 0;
+  const newEvents = fresh.results ?? [];
+  const savedEvents = saved ?? [];
+  const recommendedEvents = recommended ?? [];
+  const trendingEvents = trending ?? [];
 
   return (
     <div className=" ">
@@ -88,7 +73,11 @@ const Home = async () => {
             {CATEGORIES.map((category) => (
               <Link
                 key={category.id}
-                href={`/events?category=${category.id}`}
+                href={
+                  category.id === "all"
+                    ? "/events"
+                    : `/events?category=${category.id}`
+                }
                 className="flex flex-col items-center justify-center p-6 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-[#FF5722]/30 transition-all cursor-pointer group"
               >
                 <div className="mb-3 text-[#FF5722] group-hover:scale-110 transition-transform duration-300">
